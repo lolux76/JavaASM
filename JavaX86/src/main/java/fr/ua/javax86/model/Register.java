@@ -15,4 +15,17 @@ public class Register {
         this.debut=debut;
         this.fin=fin;
     }
+
+    public static void add(Register r1,Register r2){
+
+    }
+    public static void sub(Register r1,Register r2){
+
+    }
+    public static void mul(Register r1,Register r2){
+
+    }
+    public static void div(Register r1,Register r2){
+
+    }
 }
