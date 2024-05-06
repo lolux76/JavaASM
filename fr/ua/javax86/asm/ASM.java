@@ -1,4 +1,4 @@
-package fr.ua.javaasm.asm;
+package fr.ua.javax86.asm;
 
 import java.util.BitSet;
 
