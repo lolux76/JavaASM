@@ -9,7 +9,7 @@ public class Register {
     int debut;
     int fin;
 
-    Register(String name, BitSet arrayOfBit,int debut,int fin){
+    public Register(String name, BitSet arrayOfBit, int debut, int fin){
         this.name=name;
         this.arrayOfBit=arrayOfBit;
         this.debut=debut;
