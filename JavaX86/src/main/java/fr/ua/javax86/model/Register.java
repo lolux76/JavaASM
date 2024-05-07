@@ -42,4 +42,8 @@ public class Register {
     public static void xor(Register r1,Register r2){
         r1.arrayOfBit.xor(r2.arrayOfBit);
     }
+
+    public BitSet getArrayOfBit(){
+        return arrayOfBit;
+    }
 }
