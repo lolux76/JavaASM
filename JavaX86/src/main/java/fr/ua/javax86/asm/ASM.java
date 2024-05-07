@@ -296,66 +296,66 @@ public class ASM {
     }
     //Opérations mathématiques
     public void add(String r1, String r2){
-        Registre1 = this.parsing(r1);
-        Registre2 = this.parsing(r2);
+        Register Registre1 = this.parsing(r1);
+        Register Registre2 = this.parsing(r2);
         Register.add(Registre1, Registre2);
     }
     public void sub(String r1, String r2){
-        Registre1 = this.parsing(r1);
-        Registre2 = this.parsing(r2);
+        Register Registre1 = this.parsing(r1);
+        Register Registre2 = this.parsing(r2);
         Register.sub(Registre1, Registre2);
     }
     public void mul(String r1){
-        Registre1 = this.parsing(r1);
+        Register Registre1 = this.parsing(r1);
         Register.mul(this.eax, r1, this.edx);
     }
     public void div(String r1){
-        Registre1 = this.parsing(r1);
+        Register Registre1 = this.parsing(r1);
         Register.mul(this.eax, r1, this.edx);
     }
     //Opérations logiques
     public void and(String r1, String r2){
-        Registre1 = this.parsing(r1);
-        Registre2 = this.parsing(r2);
+        Register Registre1 = this.parsing(r1);
+        Register Registre2 = this.parsing(r2);
         Register.and(Registre1, Registre2);
     }
     public void or(String r1, String r2){
-        Registre1 = this.parsing(r1);
-        Registre2 = this.parsing(r2);
+        Register Registre1 = this.parsing(r1);
+        Register Registre2 = this.parsing(r2);
         Register.or(Registre1, Registre2);
     }
     public void xor(String r1, String r2){
-        Registre1 = this.parsing(r1);
-        Registre2 = this.parsing(r2);
+        Register Registre1 = this.parsing(r1);
+        Register Registre2 = this.parsing(r2);
         Register.xor(Registre1, Registre2);
     }
     public void not(String r1){
-        Registre1 = this.parsing(r1);
+        Register Registre1 = this.parsing(r1);
         Register.not(Registre1);
     }
     //
     public String toSigned(String r1){
-        Registre1 = this.parsing(r1);
+        Register Registre1 = this.parsing(r1);
         return Registre1.toSigned();
     }
     //
     public String toUnsigned(String r1){
-        Registre1 = this.parsing(r1);
+        Register Registre1 = this.parsing(r1);
         return Registre1.toUnsigned();
     }
     //
     public String toHex(String r1){
-        Registre1 = this.parsing(r1);
+        Register Registre1 = this.parsing(r1);
         return Registre1.toHex();
     }
     //
     public String toOct(String r1){
-        Registre1 = this.parsing(r1);
+        Register Registre1 = this.parsing(r1);
         return Registre1.toOct();
     }
     //
     public String toString(String r1){
-        Registre1 = this.parsing(r1);
+        Register Registre1 = this.parsing(r1);
         return Registre1.toString();
     }
 
