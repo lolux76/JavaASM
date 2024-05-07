@@ -334,12 +334,12 @@ public class ASM {
         Register.not(Registre1);
     }
     //
-    public String toSigned(String r1){
+    public Long toSigned(String r1){
         Register Registre1 = this.parsing(r1);
         return Registre1.toSigned();
     }
     //
-    public String toUnsigned(String r1){
+    public Long toUnsigned(String r1){
         Register Registre1 = this.parsing(r1);
         return Registre1.toUnsigned();
     }
