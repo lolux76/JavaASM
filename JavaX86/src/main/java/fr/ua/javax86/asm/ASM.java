@@ -329,35 +329,34 @@ public class ASM {
         Registre2 = this.parsing(r2);
         Register.xor(Registre1, Registre2);
     }
-    public static void not(String r1, String r2){
+    public static void not(String r1){
         Registre1 = this.parsing(r1);
-        Registre2 = this.parsing(r2);
-        Register.not(Registre1, Registre2);
+        Register.not(Registre1);
     }
     //
     public static String toSigned(String r1){
         Registre1 = this.parsing(r1);
-        return Registre1.arrayOfBit.
+        return Registre1.toSigned();
     }
     //
     public static String toUnsigned(String r1){
         Registre1 = this.parsing(r1);
-        return Registre1.arrayOfBit.
+        return Registre1.toUnsigned();
     }
     //
     public static String toHex(String r1){
         Registre1 = this.parsing(r1);
-        return Registre1.arrayOfBit.
+        return Registre1.toHex();
     }
     //
     public static String toOct(String r1){
         Registre1 = this.parsing(r1);
-        return Registre1.arrayOfBit.
+        return Registre1.toOct();
     }
     //
     public static String toString(String r1){
         Registre1 = this.parsing(r1);
-        return Registre1.arrayOfBit.
+        return Registre1.toString();
     }
 
 }
