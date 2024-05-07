@@ -150,6 +150,213 @@ public class ASM {
         bh = new Register("BH", new BitSet(8), 8, 16);
         ch = new Register("CH", new BitSet(8), 8, 16);
         dh = new Register("DH", new BitSet(8), 8, 16);
-
     }
+
+    Register parsing(String name){
+        switch (name){
+            case "sse":
+                return this.sse;
+            case "rax":
+                return this.rax;
+            case "rbx":
+                return this.rbx;
+            case "rcx":
+                return this.rcx;
+            case "rdx":
+                return this.rdx;
+            case "rsi":
+                return this.rsi;
+            case "rdi":
+                return this.rdi;
+            case "rbp":
+                return this.rbp;
+            case "rsp":
+                return this.rsp;
+            case "r8":
+                return this.r8;
+            case "r9":
+                return this.r9;
+            case "r10":
+                return this.r10;
+            case "r11":
+                return this.r11;
+            case "r12":
+                return this.r12;
+            case "r13":
+                return this.r13;
+            case "r14":
+                return this.r14;
+            case "r15":
+                return this.r15;
+            case "eax":
+                return this.eax;
+            case "ebx":
+                return this.ebx;
+            case "ecx":
+                return this.ecx;
+            case "edx":
+                return this.edx;
+            case "esi":
+                return this.esi;
+            case "edi":
+                return this.edi;
+            case "ebp":
+                return this.ebp;
+            case "esp":
+                return this.esp;
+            case "r8d":
+                return this.r8d;
+            case "r9d":
+                return this.r9d;
+            case "r10d":
+                return this.r10d;
+            case "r11d":
+                return this.r11d;
+            case "r12d":
+                return this.r12d;
+            case "r13d":
+                return this.r13d;
+            case "r14d":
+                return this.r14d;
+            case "r15d":
+                return this.r15d;
+            case "ax":
+                return this.ax;
+            case "bx":
+                return this.bx;
+            case "cx":
+                return this.cx;
+            case "dx":
+                return this.dx;
+            case "si":
+                return this.si;
+            case "di":
+                return this.di;
+            case "bp":
+                return this.bp;
+            case "sp":
+                return this.sp;
+            case "r8w":
+                return this.r8w;
+            case "r9w":
+                return this.r9w;
+            case "r10w":
+                return this.r10w;
+            case "r11w":
+                return this.r11w;
+            case "r12w":
+                return this.r12w;
+            case "r13w":
+                return this.r13w;
+            case "r14w":
+                return this.r14w;
+            case "r15w":
+                return this.r15w;
+            case "al":
+                return this.al;
+            case "bl":
+                return this.bl;
+            case "cl":
+                return this.cl;
+            case "dl":
+                return this.dl;
+            case "sil":
+                return this.sil;
+            case "dil":
+                return this.dil;
+            case "bpl":
+                return this.bpl;
+            case "spl":
+                return this.spl;
+            case "r8b":
+                return this.r8b;
+            case "r9b":
+                return this.r9b;
+            case "r10b":
+                return this.r10b;
+            case "r11b":
+                return this.r11b;
+            case "r12b":
+                return this.r12b;
+            case "r13b":
+                return this.r13b;
+            case "r14b":
+                return this.r14b;
+            case "r15b":
+                return this.r15b;
+            case "ah":
+                return this.ah;
+            case "bh":
+                return this.bh;
+            case "ch":
+                return this.ch;
+            case "dh":
+                return this.dh;
+        }
+    }
+    //Opérations mathématiques
+    public static void add(String r1, String r2){
+        Registre1 = this.parsing(r1);
+        Registre2 = this.parsing(r2);
+        Register.add(Registre1, Registre2);
+    }
+    public static void sub(String r1, String r2){
+        Registre1 = this.parsing(r1);
+        Registre2 = this.parsing(r2);
+        Register.sub(Registre1, Registre2);
+    }
+    public static void mul(String r1){
+        Registre1 = this.parsing(r1);
+        Register.mul(this.eax, r1, this.edx);
+    }
+    public static void div(String r1){
+        Registre1 = this.parsing(r1);
+        Register.mul(this.eax, r1, this.edx);
+    }
+    //Opérations logiques
+    public static void and(String r1, String r2){
+        Registre1 = this.parsing(r1);
+        Registre2 = this.parsing(r2);
+        Register.and(Registre1, Registre2);
+    }
+    public static void or(String r1, String r2){
+        Registre1 = this.parsing(r1);
+        Registre2 = this.parsing(r2);
+        Register.or(Registre1, Registre2);
+    }
+    public static void xor(String r1, String r2){
+        Registre1 = this.parsing(r1);
+        Registre2 = this.parsing(r2);
+        Register.xor(Registre1, Registre2);
+    }
+    public static void not(String r1){
+        Registre1 = this.parsing(r1);
+        Register.not(Registre1);
+    }
+    //
+    public static String toSigned(String r1){
+        Registre1 = this.parsing(r1);
+        return Registre1.toSigned();
+    }
+    //
+    public static String toUnsigned(String r1){
+        Registre1 = this.parsing(r1);
+        return Registre1.toUnsigned();
+    }
+    //
+    public static String toHex(String r1){
+        Registre1 = this.parsing(r1);
+        return Registre1.toHex();
+    }
+    //
+    public static String toOct(String r1){
+        Registre1 = this.parsing(r1);
+        return Registre1.toOct();
+    }
+    //
+    public static String toString(String r1){
+        Registre1 = this.parsing(r1);
+        return Registre1.toString();
+    }
+
 }
