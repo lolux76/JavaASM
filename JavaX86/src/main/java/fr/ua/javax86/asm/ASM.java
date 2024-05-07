@@ -295,69 +295,68 @@ public class ASM {
         }
     }
     //Opérations mathématiques
-    public static void add(String r1, String r2){
+    public void add(String r1, String r2){
         Registre1 = this.parsing(r1);
         Registre2 = this.parsing(r2);
         Register.add(Registre1, Registre2);
     }
-    public static void sub(String r1, String r2){
+    public void sub(String r1, String r2){
         Registre1 = this.parsing(r1);
         Registre2 = this.parsing(r2);
         Register.sub(Registre1, Registre2);
     }
-    public static void mul(String r1){
+    public void mul(String r1){
         Registre1 = this.parsing(r1);
         Register.mul(this.eax, r1, this.edx);
     }
-    public static void div(String r1){
+    public void div(String r1){
         Registre1 = this.parsing(r1);
         Register.mul(this.eax, r1, this.edx);
     }
     //Opérations logiques
-    public static void and(String r1, String r2){
+    public void and(String r1, String r2){
         Registre1 = this.parsing(r1);
         Registre2 = this.parsing(r2);
         Register.and(Registre1, Registre2);
     }
-    public static void or(String r1, String r2){
+    public void or(String r1, String r2){
         Registre1 = this.parsing(r1);
         Registre2 = this.parsing(r2);
         Register.or(Registre1, Registre2);
     }
-    public static void xor(String r1, String r2){
+    public void xor(String r1, String r2){
         Registre1 = this.parsing(r1);
         Registre2 = this.parsing(r2);
         Register.xor(Registre1, Registre2);
     }
-    public static void not(String r1, String r2){
+    public void not(String r1){
         Registre1 = this.parsing(r1);
-        Registre2 = this.parsing(r2);
-        Register.not(Registre1, Registre2);
+        Register.not(Registre1);
     }
     //
-    public static String toSigned(String r1){
+    public String toSigned(String r1){
         Registre1 = this.parsing(r1);
-        return Registre1.arrayOfBit.
+        return Registre1.toSigned();
     }
     //
-    public static String toUnsigned(String r1){
+    public String toUnsigned(String r1){
         Registre1 = this.parsing(r1);
-        return Registre1.arrayOfBit.
+        return Registre1.toUnsigned();
     }
     //
-    public static String toHex(String r1){
+    public String toHex(String r1){
         Registre1 = this.parsing(r1);
-        return Registre1.arrayOfBit.
+        return Registre1.toHex();
     }
     //
-    public static String toOct(String r1){
+    public String toOct(String r1){
         Registre1 = this.parsing(r1);
-        return Registre1.arrayOfBit.
+        return Registre1.toOct();
     }
     //
-    public static String toString(String r1){
+    public String toString(String r1){
         Registre1 = this.parsing(r1);
-        return Registre1.arrayOfBit.
+        return Registre1.toString();
     }
 
 }
