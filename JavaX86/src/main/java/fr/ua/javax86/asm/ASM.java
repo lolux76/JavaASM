@@ -295,6 +295,17 @@ public class ASM {
         }
         return null;
     }
+
+    public void mov(String r1, int value){
+        Register Registre1 = this.parsing(r1);
+        Registre1.mov(value);
+    }
+
+    public void shl(String r1, int value){
+        Register Registre1 = this.parsing(r1);
+        Registre1.shl(value);
+    }
+
     //Opérations mathématiques
     public void add(String r1, String r2){
         Register Registre1 = this.parsing(r1);
@@ -308,11 +319,31 @@ public class ASM {
     }
     public void mul(String r1){
         Register Registre1 = this.parsing(r1);
-        Register.mul(this.eax, Registre1, this.edx);
+        switch (Registre1.getSize()){
+            case 8 :
+                Register.mul(this.ax, this.al, Registre1);
+                break;
+            case 16 :
+                Register.mul(this.dx, this.ax, Registre1);
+                break;
+            default:
+                Register.mul(this.edx, this.eax, Registre1);
+                break;
+        }
     }
     public void div(String r1){
         Register Registre1 = this.parsing(r1);
-        Register.div(this.eax, Registre1, this.edx);
+        switch (Registre1.getSize()){
+            case 8 :
+                //Register.div(this.ax, this.al, Registre1);
+                break;
+            case 16 :
+                //Register.div(this.dx, this.ax, Registre1);
+                break;
+            default:
+                Register.div(this.eax, this.edx, Registre1, this.edx);
+                break;
+        }
     }
     //Opérations logiques
     public void and(String r1, String r2){

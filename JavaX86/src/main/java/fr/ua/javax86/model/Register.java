@@ -35,12 +35,55 @@ public class Register {
             retenue = (!a1 && retenue) || (!r1Retenu && r2.arrayOfBit.get(i));
         }
     }
-    public static void mul(Register r1, Register r2, Register edx){
 
-    }
-    public static void div(Register r1, Register r2, Register edx){
+    public static void mul(Register ax, Register al, Register operande){
+        ax.getArrayOfBit().clear();
 
+        for (int i = 0; i < 8; i++) {
+            if (operande.getArrayOfBit().get(i)) {
+                BitSet shifted = new BitSet(8);
+                shifted.or(al.getArrayOfBit());
+                ax.getArrayOfBit().xor(shifted);
+            }
+            al.shl(1);
+        }
     }
+
+    public static void div(Register quotient, Register dividend, Register divisor, Register remainder){
+        // Vérifier si le diviseur est zéro
+        if (divisor.getArrayOfBit().isEmpty()) {
+            throw new ArithmeticException("Division by zero");
+        }
+
+        // Initialise le reste avec le dividende
+        remainder.setArrayOfBit(dividend.getArrayOfBit());
+
+        // Initialise le quotient avec zéro
+        quotient.getArrayOfBit().clear();
+
+        // Trouver le bit le plus significatif du diviseur
+        int msbDivisor = findMostSignificantBit(divisor.getArrayOfBit());
+
+        // Parcourir le dividende
+        for (int i = findMostSignificantBit(remainder.getArrayOfBit()); i >= msbDivisor; i--) {
+            // Décalage du reste vers la gauche d'un bit
+            remainder.shl(1);
+
+            // Définir le bit de droite du reste au même que le bit correspondant du dividende
+            if (dividend.getArrayOfBit().get(i)) {
+                remainder.getArrayOfBit().set(0);
+            } else {
+                remainder.getArrayOfBit().clear(0);
+            }
+
+            // Si le reste est plus grand ou égal au diviseur, soustraire et mettre le bit de quotient à 1
+            if (cmp(remainder, divisor) >= 0) {
+                quotient.getArrayOfBit().set(i - msbDivisor);
+                sub(remainder, divisor);
+            }
+        }
+    }
+
     public static void and(Register r1,Register r2){
         r1.arrayOfBit.and(r2.arrayOfBit);
     }
@@ -54,8 +97,66 @@ public class Register {
     public BitSet getArrayOfBit() {
         return arrayOfBit;
     }
+
+    public void setArrayOfBit(BitSet bitSet) {
+        for(int i = 0; i < bitSet.size(); i++){
+            this.arrayOfBit.set(i, bitSet.get(i));
+        }
+    }
+
+    public void mov(int value){
+        this.arrayOfBit = BitSet.valueOf(new long[] {value});
+    }
+
+    public void shl(int distance){
+        for (int i = this.arrayOfBit.size() - 1; i >= distance; i--) {
+            this.arrayOfBit.set(i, this.arrayOfBit.get(i - distance));
+        }
+        for (int i = distance - 1; i >= 0; i--) {
+            this.arrayOfBit.set(i, false);
+        }
+    }
+
+    public static void shl(BitSet bitset, int distance) {
+        for (int i = bitset.size() - 1; i >= distance; i--) {
+            bitset.set(i, bitset.get(i - distance));
+        }
+        for (int i = distance - 1; i >= 0; i--) {
+            bitset.set(i, false);
+        }
+    }
+
+    public static int cmp(Register r1, Register r2) {
+        int msb1 = findMostSignificantBit(r1.getArrayOfBit());
+        int msb2 = findMostSignificantBit(r2.getArrayOfBit());
+
+        if (msb1 < msb2) {
+            return -1;
+        } else if (msb1 > msb2) {
+            return 1;
+        }
+
+        for (int i = msb1; i >= 0; i--) {
+            boolean bit1 = r1.getArrayOfBit().get(i);
+            boolean bit2 = r2.getArrayOfBit().get(i);
+            if (bit1 != bit2) {
+                return bit1 ? 1 : -1;
+            }
+        }
+        return 0;
+    }
+
     public static void not(Register r1){
         r1.arrayOfBit.flip(0,r1.arrayOfBit.size());
+    }
+
+    public static int findMostSignificantBit(BitSet bs) {
+        for (int i = bs.length() - 1; i >= 0; i--) {
+            if (bs.get(i)) {
+                return i;
+            }
+        }
+        return -1; // BitSet est zéro
     }
 
     //
@@ -93,13 +194,21 @@ public class Register {
         return Long.toOctalString(value);
     }
     //
-    public String toString(String r1){
-        BitSet aob = this.arrayOfBit;
-        String value = "";
-
-        for (int i = 0; i < aob.length(); ++i) {
-            value += aob.get(i);
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        int white_space = 0;
+        for (int i = this.arrayOfBit.size() - 1; i >= 0; i--) {
+            sb.append(this.arrayOfBit.get(i) ? '1' : '0');
+            white_space++;
+            if(white_space == 4){
+                white_space = 0;
+                sb.append(" ");
+            }
         }
-        return value;
+        return sb.toString();
+    }
+
+    public int getSize(){
+        return this.arrayOfBit.size();
     }
 }
