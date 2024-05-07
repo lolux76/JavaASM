@@ -64,7 +64,7 @@ public class Register {
         long value = 0L;
 
         for (int i = 0; i < aob.length(); ++i) {
-            value += bits.get(i) ? (1L << i) : 0L; //Rajoute un bit à 1 dans value, sinon rajoute un 0 à la i-ème poisition
+            value += aob.get(i) ? (1L << i) : 0L; //Rajoute un bit à 1 dans value, sinon rajoute un 0 à la i-ème poisition
             if (value >= (1L << (aob.length() - 1))) {
                 value -= (1L << aob.length());
             }
@@ -78,7 +78,7 @@ public class Register {
         long value = 0L;
 
         for (int i = 0; i < aob.length(); ++i) {
-            value += bits.get(i) ? (1L << i) : 0L; //Rajoute un bit à 1 dans value, sinon rajoute un 0 à la i-ème poisition
+            value += aob.get(i) ? (1L << i) : 0L; //Rajoute un bit à 1 dans value, sinon rajoute un 0 à la i-ème poisition
         }
         return value
     }
