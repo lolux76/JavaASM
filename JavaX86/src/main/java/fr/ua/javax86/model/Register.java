@@ -9,7 +9,7 @@ public class Register {
     int debut;
     int fin;
 
-    Register(String name, BitSet arrayOfBit,int debut,int fin){
+    public Register(String name, BitSet arrayOfBit, int debut, int fin){
         this.name=name;
         this.arrayOfBit=arrayOfBit;
         this.debut=debut;
@@ -52,5 +52,50 @@ public class Register {
     }
     public static void not(Register r1){
         r1.arrayOfBit.flip(0,r1.arrayOfBit.size());
+    }
+
+    //
+    public long toSigned(){
+        BitSet aob = this.arrayOfBit;
+        long value = 0L;
+
+        for (int i = 0; i < aob.length(); ++i) {
+            value += bits.get(i) ? (1L << i) : 0L; //Rajoute un bit à 1 dans value, sinon rajoute un 0 à la i-ème poisition
+            if (value >= (1L << (aob.length() - 1))) {
+                value -= (1L << aob.length());
+            }
+        }
+
+        return value
+    }
+    //
+    public static long toUnsigned(){
+        BitSet aob = this.arrayOfBit;
+        long value = 0L;
+
+        for (int i = 0; i < aob.length(); ++i) {
+            value += bits.get(i) ? (1L << i) : 0L; //Rajoute un bit à 1 dans value, sinon rajoute un 0 à la i-ème poisition
+        }
+        return value
+    }
+    //
+    public String toHex() {
+        long value = toUnsigned(); // Utiliser la méthode toUnsigned() pour obtenir la valeur non signée
+        return Long.toHexString(value);
+    }
+    //
+    public String toOct() {
+        long value = toUnsigned(); // Utiliser la méthode toUnsigned() pour obtenir la valeur non signée
+        return Long.toOctalString(value);
+    }
+    //
+    public static String toString(String r1){
+        BitSet aob = this.arrayOfBit;
+        String value = "";
+
+        for (int i = 0; i < aob.length(); ++i) {
+            value += bits.get(i)
+        }
+        return value
     }
 }
