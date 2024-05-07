@@ -35,10 +35,10 @@ public class Register {
             retenue = (!a1 && retenue) || (!r1Retenu && r2.arrayOfBit.get(i));
         }
     }
-    public static void mul(Register r1,Register r2){
+    public static void mul(Register r1, Register r2, Register edx){
 
     }
-    public static void div(Register r1,Register r2){
+    public static void div(Register r1, Register r2, Register edx){
 
     }
     public static void and(Register r1,Register r2){

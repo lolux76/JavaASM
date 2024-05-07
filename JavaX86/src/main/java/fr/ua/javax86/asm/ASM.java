@@ -293,6 +293,7 @@ public class ASM {
             case "dh":
                 return this.dh;
         }
+        return null;
     }
     //Opérations mathématiques
     public void add(String r1, String r2){
@@ -307,11 +308,11 @@ public class ASM {
     }
     public void mul(String r1){
         Register Registre1 = this.parsing(r1);
-        Register.mul(this.eax, r1, this.edx);
+        Register.mul(this.eax, Registre1, this.edx);
     }
     public void div(String r1){
         Register Registre1 = this.parsing(r1);
-        Register.mul(this.eax, r1, this.edx);
+        Register.div(this.eax, Registre1, this.edx);
     }
     //Opérations logiques
     public void and(String r1, String r2){
