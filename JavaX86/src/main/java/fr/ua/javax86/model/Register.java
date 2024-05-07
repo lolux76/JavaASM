@@ -51,9 +51,9 @@ public class Register {
         r1.arrayOfBit.xor(r2.arrayOfBit);
     }
 
-    public BitSet getArrayOfBit(){
+    public BitSet getArrayOfBit() {
         return arrayOfBit;
-  
+    }
     public static void not(Register r1){
         r1.arrayOfBit.flip(0,r1.arrayOfBit.size());
     }
@@ -70,17 +70,17 @@ public class Register {
             }
         }
 
-        return value
+        return value;
     }
     //
-    public static long toUnsigned(){
+    public long toUnsigned(){
         BitSet aob = this.arrayOfBit;
         long value = 0L;
 
         for (int i = 0; i < aob.length(); ++i) {
             value += aob.get(i) ? (1L << i) : 0L; //Rajoute un bit à 1 dans value, sinon rajoute un 0 à la i-ème poisition
         }
-        return value
+        return value;
     }
     //
     public String toHex() {
@@ -93,13 +93,13 @@ public class Register {
         return Long.toOctalString(value);
     }
     //
-    public static String toString(String r1){
+    public String toString(String r1){
         BitSet aob = this.arrayOfBit;
         String value = "";
 
         for (int i = 0; i < aob.length(); ++i) {
-            value += bits.get(i)
+            value += aob.get(i);
         }
-        return value
+        return value;
     }
 }
