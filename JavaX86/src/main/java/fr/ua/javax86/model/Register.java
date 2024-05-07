@@ -26,6 +26,14 @@ public class Register {
         // Pour plus tard si carry=true alors overflow
     }
     public static void sub(Register r1,Register r2){
+        boolean retenue = false;
+
+        for (int i = 0; i < r1.arrayOfBit.size(); i++) {
+            boolean a1 = r1.arrayOfBit.get(i);
+            boolean r1Retenu = r1.arrayOfBit.get(i) || retenue;
+            r1.arrayOfBit.set(i,r1Retenu ^ r2.arrayOfBit.get(i));
+            retenue = (!a1 && retenue) || (!r1Retenu && r2.arrayOfBit.get(i));
+        }
     }
     public static void mul(Register r1,Register r2){
 
@@ -41,6 +49,9 @@ public class Register {
     }
     public static void xor(Register r1,Register r2){
         r1.arrayOfBit.xor(r2.arrayOfBit);
+    }
+    public static void not(Register r1){
+        r1.arrayOfBit.flip(0,r1.arrayOfBit.size());
     }
 
     //
