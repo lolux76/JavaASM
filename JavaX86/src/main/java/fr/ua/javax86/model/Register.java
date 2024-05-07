@@ -50,6 +50,10 @@ public class Register {
     public static void xor(Register r1,Register r2){
         r1.arrayOfBit.xor(r2.arrayOfBit);
     }
+
+    public BitSet getArrayOfBit(){
+        return arrayOfBit;
+  
     public static void not(Register r1){
         r1.arrayOfBit.flip(0,r1.arrayOfBit.size());
     }
