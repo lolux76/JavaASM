@@ -11,7 +11,7 @@ public class Register {
 
     public Register(String name, BitSet arrayOfBit, int debut, int fin){
         this.name=name;
-        this.arrayOfBit=arrayOfBit;
+        this.arrayOfBit=arrayOfBit.get(debut,fin);
         this.debut=debut;
         this.fin=fin;
     }
