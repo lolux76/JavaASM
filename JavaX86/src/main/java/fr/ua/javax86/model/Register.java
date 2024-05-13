@@ -66,8 +66,8 @@ public class Register {
 
         // Parcourir le dividende
         for (int i = findMostSignificantBit(remainder.getArrayOfBit()); i >= msbDivisor; i--) {
-            // Décalage du reste vers la gauche d'un bit
-            remainder.shl(1);
+            // Décalage du reste vers la droite d'un bit
+            remainder.shr(1);
 
             // Définir le bit de droite du reste au même que le bit correspondant du dividende
             if (dividend.getArrayOfBit().get(i)) {
@@ -123,6 +123,15 @@ public class Register {
         }
         for (int i = distance - 1; i >= 0; i--) {
             bitset.set(i, false);
+        }
+    }
+
+    public void shr(int distance) {
+        for (int i = 0; i < this.arrayOfBit.size() - distance; i++) {
+            this.arrayOfBit.set(i, this.arrayOfBit.get(i + distance));
+        }
+        for (int i = this.arrayOfBit.size() - distance; i < this.arrayOfBit.size(); i++) {
+            this.arrayOfBit.set(i, false);
         }
     }
 
