@@ -27,7 +27,7 @@ public class ASMEditor extends JFrame {
         textPane.setForeground(Color.WHITE);
 
 
-        lireConfiguration("./coloration.json");
+        lireConfiguration();
 
         textPane.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent e) {
@@ -36,11 +36,11 @@ public class ASMEditor extends JFrame {
         });
     }
 
-    private void lireConfiguration(String fileName) {
+    private void lireConfiguration() {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             Map<String, List<String>> config = objectMapper.readValue(
-                    new File(fileName),
+                    new File("./coloration.json"),
                     Map.class
             );
 
@@ -71,23 +71,41 @@ public class ASMEditor extends JFrame {
         }
     }
 
+    private AttributeSet createGrayAttributeSet() {
+        SimpleAttributeSet attributeSet = new SimpleAttributeSet();
+        StyleConstants.setForeground(attributeSet, Color.GRAY);
+        return attributeSet;
+    }
+
     private void appliquerColoration() {
         StyledDocument doc = textPane.getStyledDocument();
-
         doc.setCharacterAttributes(0, doc.getLength(), new SimpleAttributeSet(), true);
-
         String text = textPane.getText();
+        int index = 0;
         for (Map.Entry<String, Color> entry : colorMap.entrySet()) {
             String word = entry.getKey();
             Color color = entry.getValue();
 
-            int index = 0;
             while ((index = text.indexOf(word, index)) >= 0) {
                 SimpleAttributeSet sas = new SimpleAttributeSet();
                 StyleConstants.setForeground(sas, color);
 
                 doc.setCharacterAttributes(index, word.length(), sas, false);
                 index += word.length();
+            }
+            index = 0;
+        }
+
+        // Coloration des commentaires avec point virgule (en gris)
+        String[] lines = text.split("\n");
+        for (int i = 0; i < lines.length; i++) {
+            if (lines[i].startsWith(";")) {
+                Element root = doc.getDefaultRootElement();
+                Element line = root.getElement(i);
+                int start = line.getStartOffset();
+                int end = line.getEndOffset() - 1;
+
+                doc.setCharacterAttributes(start, end - start, createGrayAttributeSet(), false);
             }
         }
     }
