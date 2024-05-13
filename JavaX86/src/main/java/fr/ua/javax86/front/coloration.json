@@ -1,6 +1,6 @@
 {
   "colors": {
-    "orange": ["rax", "rbx", "rcx", "rdx","rsi","rdi","rbp","rsp",
+    "registers": ["rax", "rbx", "rcx", "rdx","rsi","rdi","rbp","rsp",
     "eax","ebx","ecx","edx","esi","edi","ebp","esp",
     "ax","bx","cx","dx","si","di","bp","sp",
     "ah","bh","ch","dh",
@@ -10,7 +10,8 @@
       "r8w","r9w","r10w","r11w","r12w","r13w","r14w","r15w",
       "r8b","r9b","r10b","r11b","r12b","r13b","r14b","r15b"
     ],
-    "rouge": ["for", "while", "if", "else"],
-    "vert": ["int", "float", "double"]
+    "numbers": ["0","1","2","3","4","5","6","7","8","9"],
+    "operation": ["add","sub","mul","div"]
+
   }
 }
