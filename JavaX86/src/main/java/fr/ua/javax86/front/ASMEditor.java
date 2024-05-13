@@ -18,13 +18,16 @@ public class ASMEditor extends JFrame {
     public ASMEditor() {
         super("ASM Editor");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(500, 300);
+        setSize(500, 500);
 
         textPane = new JTextPane();
         JScrollPane scrollPane = new JScrollPane(textPane);
         add(scrollPane, BorderLayout.CENTER);
+        textPane.setBackground(Color.BLACK);
+        textPane.setForeground(Color.WHITE);
 
-        lireConfiguration("./config.json"); // Nom du fichier de configuration
+
+        lireConfiguration("./coloration.json");
 
         textPane.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent e) {
@@ -57,12 +60,12 @@ public class ASMEditor extends JFrame {
 
     private Color getColorByName(String name) {
         switch (name) {
-            case "orange":
-                return Color.ORANGE;
-            case "rouge":
-                return Color.RED;
-            case "vert":
+            case "registers":
+                return Color.CYAN;
+            case "numbers":
                 return Color.GREEN;
+            case "operation":
+                return Color.ORANGE;
             default:
                 return null;
         }
