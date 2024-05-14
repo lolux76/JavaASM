@@ -15,6 +15,29 @@ public class Register {
         this.debut=debut;
         this.fin=fin;
     }
+    public Register(String name, BitSet arrayOfBit, int debut, int fin,int value){
+        this.name=name;
+        this.arrayOfBit=arrayOfBit;
+        this.debut=debut;
+        this.fin=fin;
+        for (int i = 0; i < arrayOfBit.size(); i++) {
+            if (((value >> i) & 1) == 1) {
+                this.arrayOfBit.set(i,true);
+            }else{
+                this.arrayOfBit.set(i,false);
+            }
+        }
+    }
+
+    public static void setValue(Register r1,int value){
+        for (int i = 0; i < arrayOfBit.size(); i++) {
+            if (((value >> i) & 1) == 1) {
+                this.arrayOfBit.set(i,true);
+            }else{
+                this.arrayOfBit.set(i,false);
+            }
+        }
+    }
 
     public static void add(Register r1,Register r2){
         boolean retenue=false;
@@ -97,5 +120,10 @@ public class Register {
             value += bits.get(i)
         }
         return value
+    }
+
+    public static void toComp(Register r1){
+        Register.not(r1);
+        Register.add(r1,Register. new Register('add',new BitSet(r1.arrayOfBit.size()),0,r1.arrayOfBit.size(),1));
     }
 }
