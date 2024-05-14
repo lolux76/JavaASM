@@ -10,12 +10,18 @@ import java.awt.event.*;
 import java.io.*;
 import java.util.HashMap;
 import java.util.List;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import java.util.Map;
 
 public class ASMEditor extends JFrame {
     private JTextPane textPane;
     private JTable table;
+    private DefaultTableModel tableModel;
     private Map<String, Color> colorMap = new HashMap<>();
+    private List<String> registers;
 
     public ASMEditor() {
         super("ASM Editor");
@@ -28,10 +34,18 @@ public class ASMEditor extends JFrame {
         textPane.setBackground(Color.BLACK);
         textPane.setForeground(Color.WHITE);
         JScrollPane textScrollPane = new JScrollPane(textPane);
-        mainPanel.add(textScrollPane, BorderLayout.CENTER);
+
+        JButton runButton = new JButton("Run");
+        runButton.addActionListener(e -> updateTableWithRegisters());
+
+        JPanel editorPanel = new JPanel(new BorderLayout());
+        editorPanel.add(textScrollPane, BorderLayout.CENTER);
+        editorPanel.add(runButton, BorderLayout.SOUTH);
+
+        mainPanel.add(editorPanel, BorderLayout.CENTER);
 
         JPanel tablePanel = new JPanel(new BorderLayout());
-        DefaultTableModel tableModel = new DefaultTableModel(new Object[]{"Name", "Binary", "Hexadecimal", "Signed Decimal"}, 0);
+        tableModel = new DefaultTableModel(new Object[]{"Name", "Binary", "Hexadecimal", "Signed Decimal"}, 0);
         table = new JTable(tableModel);
         JScrollPane tableScrollPane = new JScrollPane(table);
         tablePanel.add(tableScrollPane, BorderLayout.CENTER);
@@ -58,6 +72,7 @@ public class ASMEditor extends JFrame {
             );
 
             Map<String, List<String>> colors = (Map<String, List<String>>) config.get("colors");
+            registers = colors.get("registers");
             for (Map.Entry<String, List<String>> entry : colors.entrySet()) {
                 Color color = getColorByName(entry.getKey());
                 if (color != null) {
@@ -123,6 +138,24 @@ public class ASMEditor extends JFrame {
         }
     }
 
+    private void updateTableWithRegisters() {
+        tableModel.setRowCount(0); // Clear existing rows
+        String text = textPane.getText();
+
+        Set<String> foundRegisters = new HashSet<>();
+        for (String register : registers) {
+            Pattern pattern = Pattern.compile("\\b" + register + "\\b");
+            Matcher matcher = pattern.matcher(text);
+            if (matcher.find()) {
+                foundRegisters.add(register);
+            }
+        }
+
+        for (String register : foundRegisters) {
+            tableModel.addRow(new Object[]{register, "", "", ""});
+        }
+    }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             ASMEditor editor = new ASMEditor();
@@ -130,4 +163,3 @@ public class ASMEditor extends JFrame {
         });
     }
 }
-
