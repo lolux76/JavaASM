@@ -24,6 +24,18 @@ public class Register {
             retenue = (a1 & retenue) | (r2.arrayOfBit.get(i) & retenue) | (a1 & r2.arrayOfBit.get(i)); //Retenue si au moins 2 bit à 1
         }
         // Pour plus tard si carry=true alors overflow
+        //Carry Flag
+        if(retenue){
+            Flags.getFlags().setCarryFlag(true);
+        }
+
+        //Zero Flag
+        Flags.getFlags().setZeroFlag(true);
+        for(int i = r1.debut; i < r1.fin; i++){
+            if(r1.getArrayOfBit().get(i)){
+                Flags.getFlags().setZeroFlag(false);
+            }
+        }
     }
     public static void sub(Register r1,Register r2){
         boolean retenue = false;
@@ -33,6 +45,19 @@ public class Register {
             boolean r1Retenu = r1.arrayOfBit.get(i) || retenue;
             r1.arrayOfBit.set(i,r1Retenu ^ r2.arrayOfBit.get(i));
             retenue = (!a1 && retenue) || (!r1Retenu && r2.arrayOfBit.get(i));
+        }
+
+        //Carry Flag
+        if(retenue){
+            Flags.getFlags().setCarryFlag(true);
+        }
+
+        //Zero Flag
+        Flags.getFlags().setZeroFlag(true);
+        for(int i = r1.debut; i < r1.fin; i++){
+            if(r1.getArrayOfBit().get(i)){
+                Flags.getFlags().setZeroFlag(false);
+            }
         }
     }
 
