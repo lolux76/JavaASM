@@ -82,22 +82,22 @@ public class ASM {
     Register r15b;
     public ASM(){
         //bitsets
-        bs0 = new BitSet(64);
-        bs1 = new BitSet(64);
-        bs2 = new BitSet(64);
-        bs3 = new BitSet(64);
-        bs4 = new BitSet(64);
-        bs5 = new BitSet(64);
-        bs6 = new BitSet(64);
-        bs7 = new BitSet(64);
-        bs8 = new BitSet(64);
-        bs9 = new BitSet(64);
-        bs10 = new BitSet(64);
-        bs11 = new BitSet(64);
-        bs12 = new BitSet(64);
-        bs13 = new BitSet(64);
-        bs14 = new BitSet(64);
-        bs15 = new BitSet(64);
+        BitSet bs0 = new BitSet(64);
+        BitSet bs1 = new BitSet(64);
+        BitSet bs2 = new BitSet(64);
+        BitSet bs3 = new BitSet(64);
+        BitSet bs4 = new BitSet(64);
+        BitSet bs5 = new BitSet(64);
+        BitSet bs6 = new BitSet(64);
+        BitSet bs7 = new BitSet(64);
+        BitSet bs8 = new BitSet(64);
+        BitSet bs9 = new BitSet(64);
+        BitSet bs10 = new BitSet(64);
+        BitSet bs11 = new BitSet(64);
+        BitSet bs12 = new BitSet(64);
+        BitSet bs13 = new BitSet(64);
+        BitSet bs14 = new BitSet(64);
+        BitSet bs15 = new BitSet(64);
 
         //64 bits
         rax = new Register("RAX", bs0, 0, 64);
