@@ -3,6 +3,7 @@ package fr.ua.javax86.front;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -13,19 +14,31 @@ import java.util.Map;
 
 public class ASMEditor extends JFrame {
     private JTextPane textPane;
+    private JTable table;
     private Map<String, Color> colorMap = new HashMap<>();
 
     public ASMEditor() {
         super("ASM Editor");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(500, 500);
+        setSize(1000, 500);
+
+        JPanel mainPanel = new JPanel(new BorderLayout());
 
         textPane = new JTextPane();
-        JScrollPane scrollPane = new JScrollPane(textPane);
-        add(scrollPane, BorderLayout.CENTER);
         textPane.setBackground(Color.BLACK);
         textPane.setForeground(Color.WHITE);
+        JScrollPane textScrollPane = new JScrollPane(textPane);
+        mainPanel.add(textScrollPane, BorderLayout.CENTER);
 
+        JPanel tablePanel = new JPanel(new BorderLayout());
+        DefaultTableModel tableModel = new DefaultTableModel(new Object[]{"Name", "Binary", "Hexadecimal", "Signed Decimal"}, 0);
+        table = new JTable(tableModel);
+        JScrollPane tableScrollPane = new JScrollPane(table);
+        tablePanel.add(tableScrollPane, BorderLayout.CENTER);
+
+        mainPanel.add(tablePanel, BorderLayout.EAST);
+
+        add(mainPanel);
 
         lireConfiguration();
 
