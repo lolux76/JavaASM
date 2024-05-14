@@ -18,16 +18,16 @@ public class Register {
 
     public static void add(Register r1,Register r2){
         boolean retenue=false;
+        boolean signed = r1.getArrayOfBit().get(r1.fin - 1) && r2.getArrayOfBit().get(r2.fin - 1);
+
         for(int i=0;i<r1.arrayOfBit.size();i++){
             boolean a1 = r1.arrayOfBit.get(i);
             r1.arrayOfBit.set(i,r1.arrayOfBit.get(i) ^ r2.arrayOfBit.get(i) ^ retenue); //addition de chaque bit 1 à 1
             retenue = (a1 & retenue) | (r2.arrayOfBit.get(i) & retenue) | (a1 & r2.arrayOfBit.get(i)); //Retenue si au moins 2 bit à 1
         }
-        // Pour plus tard si carry=true alors overflow
+
         //Carry Flag
-        if(retenue){
-            Flags.getFlags().setCarryFlag(true);
-        }
+        Flags.getFlags().setCarryFlag(retenue);
 
         //Zero Flag
         Flags.getFlags().setZeroFlag(true);
@@ -36,9 +36,31 @@ public class Register {
                 Flags.getFlags().setZeroFlag(false);
             }
         }
+
+        //Overflow Flag
+        if(signed != r1.getArrayOfBit().get(r1.fin - 1)){
+            Flags.getFlags().setOverflowFlag(true);
+        }
+        else{
+            Flags.getFlags().setOverflowFlag(false);
+        }
+
+        //Sign flag
+        Flags.getFlags().setSignFlag(r1.getArrayOfBit().get(r1.fin - 1));
+
+        //Parity Flag
+        int compteur = 0;
+        for(int i = r1.debut; i < r1.fin; i++){
+            if(r1.getArrayOfBit().get(i)){
+                compteur++;
+            }
+        }
+        Flags.getFlags().setParityFlag(compteur % 2 == 0);
+
     }
     public static void sub(Register r1,Register r2){
         boolean retenue = false;
+        boolean signed = r1.getArrayOfBit().get(r1.fin - 1) && r2.getArrayOfBit().get(r2.fin - 1);
 
         for (int i = 0; i < r1.arrayOfBit.size(); i++) {
             boolean a1 = r1.arrayOfBit.get(i);
@@ -48,9 +70,7 @@ public class Register {
         }
 
         //Carry Flag
-        if(retenue){
-            Flags.getFlags().setCarryFlag(true);
-        }
+        Flags.getFlags().setCarryFlag(retenue);
 
         //Zero Flag
         Flags.getFlags().setZeroFlag(true);
@@ -59,6 +79,26 @@ public class Register {
                 Flags.getFlags().setZeroFlag(false);
             }
         }
+
+        //Overflow Flag
+        if(signed != r1.getArrayOfBit().get(r1.fin - 1)){
+            Flags.getFlags().setOverflowFlag(true);
+        }
+        else{
+            Flags.getFlags().setOverflowFlag(false);
+        }
+
+        //Sign flag
+        Flags.getFlags().setSignFlag(r1.getArrayOfBit().get(r1.fin - 1));
+
+        //Parity Flag
+        int compteur = 0;
+        for(int i = r1.debut; i < r1.fin; i++){
+            if(r1.getArrayOfBit().get(i)){
+                compteur++;
+            }
+        }
+        Flags.getFlags().setParityFlag(compteur % 2 == 0);
     }
 
     public static void mul(Register ax, Register al, Register operande){
