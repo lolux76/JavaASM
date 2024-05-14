@@ -20,22 +20,24 @@ public class Register {
         this.arrayOfBit=arrayOfBit;
         this.debut=debut;
         this.fin=fin;
-        for (int i = 0; i < arrayOfBit.size(); i++) {
-            if (((value >> i) & 1) == 1) {
-                this.arrayOfBit.set(i,true);
-            }else{
-                this.arrayOfBit.set(i,false);
+        int i=0;
+        while (value != 0) {
+            if (value % 2 == 1) {
+                this.arrayOfBit.set(i);
             }
+            value /= 2;
+            i++;
         }
     }
 
     public static void setValue(Register r1,int value){
-        for (int i = 0; i < arrayOfBit.size(); i++) {
-            if (((value >> i) & 1) == 1) {
-                this.arrayOfBit.set(i,true);
-            }else{
-                this.arrayOfBit.set(i,false);
+        int i=0;
+        while (value != 0) {
+            if (value % 2 == 1) {
+                r1.arrayOfBit.set(i);
             }
+            value /= 2;
+            i++;
         }
     }
 
@@ -257,7 +259,7 @@ public class Register {
     }
 
     //
-    public long toSigned(){
+    /*public long toSigned(){
         BitSet aob = this.arrayOfBit;
         long value = 0L;
 
@@ -271,8 +273,8 @@ public class Register {
         return value;
     }
     //
-    public long toUnsigned(){
-        BitSet aob = this.arrayOfBit;
+    public static long toUnsigned(Register r1){
+        BitSet aob = r1.arrayOfBit;
         long value = 0L;
 
         for (int i = 0; i < aob.length(); ++i) {
@@ -289,7 +291,7 @@ public class Register {
     public String toOct() {
         long value = toUnsigned(); // Utiliser la méthode toUnsigned() pour obtenir la valeur non signée
         return Long.toOctalString(value);
-    }
+    }*/
     //
     public String toString(){
         StringBuilder sb = new StringBuilder();
@@ -311,6 +313,6 @@ public class Register {
 
     public static void toComp(Register r1){
         Register.not(r1);
-        Register.add(r1,Register. new Register('add',new BitSet(r1.arrayOfBit.size()),0,r1.arrayOfBit.size(),1));
+        Register.add(r1,new Register("add",new BitSet(r1.arrayOfBit.size()),0,r1.arrayOfBit.size(),1));
     }
 }
