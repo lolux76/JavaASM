@@ -193,7 +193,7 @@ public class ASM {
         dh = new Register("DH", bs3, 8, 16);
     }
 
-    Register parsing(String name){
+    public Register parsing(String name){
         switch (name){
             case "sse":
                 return this.sse;
@@ -337,6 +337,7 @@ public class ASM {
                 return null;
         }
     }
+
 
     public void mov(String r1, int value){
         Register Registre1 = this.parsing(r1);
