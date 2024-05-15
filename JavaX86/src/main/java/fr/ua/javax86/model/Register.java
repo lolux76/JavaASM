@@ -137,6 +137,8 @@ public class Register {
     }
 
     public static void mul(Register ax, Register al, Register operande){
+        boolean signed = al.getArrayOfBit().get(al.fin - 1) && operande.getArrayOfBit().get(operande.fin - 1);
+
         ax.getArrayOfBit().clear();
 
         for (int i = 0; i < 8; i++) {
@@ -147,9 +149,42 @@ public class Register {
             }
             al.shl(1);
         }
+
+        //Zero Flag
+        Flags.getFlags().setZeroFlag(true);
+        for(int i = ax.debut; i < ax.fin; i++){
+            if(ax.getArrayOfBit().get(i)){
+                Flags.getFlags().setZeroFlag(false);
+            }
+        }
+
+        //Overflow Flag
+        if(signed != ax.getArrayOfBit().get(ax.fin - 1)){
+            Flags.getFlags().setOverflowFlag(true);
+        }
+        else{
+            Flags.getFlags().setOverflowFlag(false);
+        }
+
+        //Sign Flag
+        Flags.getFlags().setSignFlag(ax.getArrayOfBit().get(ax.fin - 1));
+
+        //Parity Flag
+        int compteur = 0;
+        for(int i = ax.debut; i < ax.fin; i++){
+            if(ax.getArrayOfBit().get(i)){
+                compteur++;
+            }
+        }
+        Flags.getFlags().setParityFlag(compteur % 2 == 0);
+
+        //Carry Flag
+        Flags.getFlags().setCarryFlag(!ax.isHomogeneous());
     }
 
     public static void div(Register quotient, Register dividend, Register divisor, Register remainder){
+        boolean signed = dividend.getArrayOfBit().get(dividend.fin - 1) && divisor.getArrayOfBit().get(divisor.fin - 1);
+
         // Vérifier si le diviseur est zéro
         if (divisor.getArrayOfBit().isEmpty()) {
             throw new ArithmeticException("Division by zero");
@@ -182,16 +217,125 @@ public class Register {
                 sub(remainder, divisor);
             }
         }
+
+        //Zero Flag
+        Flags.getFlags().setZeroFlag(true);
+        for(int i = quotient.debut; i < quotient.fin; i++){
+            if(quotient.getArrayOfBit().get(i)){
+                Flags.getFlags().setZeroFlag(false);
+            }
+        }
+
+        //Overflow Flag
+        if(signed != quotient.getArrayOfBit().get(quotient.fin - 1)){
+            Flags.getFlags().setOverflowFlag(true);
+        }
+        else{
+            Flags.getFlags().setOverflowFlag(false);
+        }
+
+        //Sign Flag
+        Flags.getFlags().setSignFlag(quotient.getArrayOfBit().get(quotient.fin - 1));
+
+        //Parity Flag
+        int compteur = 0;
+        for(int i = quotient.debut; i < quotient.fin; i++){
+            if(quotient.getArrayOfBit().get(i)){
+                compteur++;
+            }
+        }
+        Flags.getFlags().setParityFlag(compteur % 2 == 0);
+
+        //Carry Flag
+        Flags.getFlags().setCarryFlag(!quotient.isHomogeneous());
     }
 
     public static void and(Register r1,Register r2){
         r1.arrayOfBit.and(r2.arrayOfBit);
+
+        //Zero Flag
+        Flags.getFlags().setZeroFlag(true);
+        for(int i = r1.debut; i < r1.fin; i++){
+            if(r1.getArrayOfBit().get(i)){
+                Flags.getFlags().setZeroFlag(false);
+            }
+        }
+
+        //Overflow Flag
+        Flags.getFlags().setOverflowFlag(false);
+
+        //Sign Flag
+        Flags.getFlags().setSignFlag(r1.getArrayOfBit().get(r1.fin - 1));
+
+        //Parity Flag
+        int compteur = 0;
+        for(int i = r1.debut; i < r1.fin; i++){
+            if(r1.getArrayOfBit().get(i)){
+                compteur++;
+            }
+        }
+        Flags.getFlags().setParityFlag(compteur % 2 == 0);
+
+        //Carry Flag
+        Flags.getFlags().setCarryFlag(false);
     }
     public static void or(Register r1,Register r2){
         r1.arrayOfBit.or(r2.arrayOfBit);
+
+        //Zero Flag
+        Flags.getFlags().setZeroFlag(true);
+        for(int i = r1.debut; i < r1.fin; i++){
+            if(r1.getArrayOfBit().get(i)){
+                Flags.getFlags().setZeroFlag(false);
+            }
+        }
+
+        //Overflow Flag
+        Flags.getFlags().setOverflowFlag(false);
+
+        //Sign Flag
+        Flags.getFlags().setSignFlag(r1.getArrayOfBit().get(r1.fin - 1));
+
+        //Parity Flag
+        int compteur = 0;
+        for(int i = r1.debut; i < r1.fin; i++){
+            if(r1.getArrayOfBit().get(i)){
+                compteur++;
+            }
+        }
+        Flags.getFlags().setParityFlag(compteur % 2 == 0);
+
+        //Carry Flag
+        Flags.getFlags().setCarryFlag(false);
     }
     public static void xor(Register r1,Register r2){
         r1.arrayOfBit.xor(r2.arrayOfBit);
+
+        //Zero Flag
+        Flags.getFlags().setZeroFlag(true);
+        for(int i = r1.debut; i < r1.fin; i++){
+            if(r1.getArrayOfBit().get(i)){
+                Flags.getFlags().setZeroFlag(false);
+            }
+        }
+
+        //Overflow Flag
+        Flags.getFlags().setOverflowFlag(false);
+
+        //Sign Flag
+        Flags.getFlags().setSignFlag(r1.getArrayOfBit().get(r1.fin - 1));
+
+        //Parity Flag
+        int compteur = 0;
+        for(int i = r1.debut; i < r1.fin; i++){
+            if(r1.getArrayOfBit().get(i)){
+                compteur++;
+            }
+        }
+        Flags.getFlags().setParityFlag(compteur % 2 == 0);
+
+        //Carry Flag
+        Flags.getFlags().setCarryFlag(false);
     }
 
     public BitSet getArrayOfBit() {
@@ -206,6 +350,27 @@ public class Register {
 
     public void mov(int value){
         this.arrayOfBit = BitSet.valueOf(new long[] {value});
+
+        //Zero Flag
+        Flags.getFlags().setZeroFlag(value == 0);
+
+        //Overflow Flag
+        Flags.getFlags().setOverflowFlag(false);
+
+        //Sign Flag
+        Flags.getFlags().setSignFlag(this.arrayOfBit.get(this.fin - 1));
+
+        //Parity Flag
+        int compteur = 0;
+        for(int i = this.debut; i < this.fin; i++){
+            if(this.getArrayOfBit().get(i)){
+                compteur++;
+            }
+        }
+        Flags.getFlags().setParityFlag(compteur % 2 == 0);
+
+        //Carry Flag
+        Flags.getFlags().setCarryFlag(false);
     }
 
     public void shl(int distance){
@@ -266,6 +431,16 @@ public class Register {
             }
         }
         return -1; // BitSet est zéro
+    }
+
+    protected boolean isHomogeneous() {
+        boolean firstBit = this.getArrayOfBit().get(this.debut);
+        for (int i = this.debut + 1; i < this.fin; i++) {
+            if (this.getArrayOfBit().get(i) != firstBit) {
+                return false;
+            }
+        }
+        return true;
     }
 
     //
