@@ -8,6 +8,8 @@ public class Register {
     BitSet arrayOfBit;
     int debut;
     int fin;
+    Register partieHaute;
+    Register partieBasse;
 
     public Register(String name, BitSet arrayOfBit, int debut, int fin){
         this.name=name;
@@ -15,11 +17,35 @@ public class Register {
         this.debut=debut;
         this.fin=fin;
     }
-    public Register(String name, BitSet arrayOfBit, int debut, int fin,int value){
+    public Register(String name, BitSet arrayOfBit, int debut, int fin, Register basse, Register haute){
+        this.name=name;
+        this.arrayOfBit=arrayOfBit.get(debut, fin);
+        this.debut=debut;
+        this.fin=fin;
+        this.partieBasse = basse;
+        this.partieHaute = haute;
+    }
+    public Register(String name, BitSet arrayOfBit, int debut, int fin, int value){
         this.name=name;
         this.arrayOfBit=arrayOfBit;
         this.debut=debut;
         this.fin=fin;
+        int i=0;
+        while (value != 0) {
+            if (value % 2 == 1) {
+                this.arrayOfBit.set(i);
+            }
+            value /= 2;
+            i++;
+        }
+    }
+    public Register(String name, BitSet arrayOfBit, int debut, int fin, Register basse, Register haute, int value){
+        this.name=name;
+        this.arrayOfBit=arrayOfBit;
+        this.debut=debut;
+        this.fin=fin;
+        this.partieBasse = basse;
+        this.partieHaute = haute;
         int i=0;
         while (value != 0) {
             if (value % 2 == 1) {
@@ -259,7 +285,7 @@ public class Register {
     }
 
     //
-    /*public long toSigned(){
+    public long toSigned(){
         BitSet aob = this.arrayOfBit;
         long value = 0L;
 
@@ -273,8 +299,8 @@ public class Register {
         return value;
     }
     //
-    public static long toUnsigned(Register r1){
-        BitSet aob = r1.arrayOfBit;
+    public long toUnsigned(){
+        BitSet aob = this.arrayOfBit;
         long value = 0L;
 
         for (int i = 0; i < aob.length(); ++i) {
@@ -291,7 +317,7 @@ public class Register {
     public String toOct() {
         long value = toUnsigned(); // Utiliser la méthode toUnsigned() pour obtenir la valeur non signée
         return Long.toOctalString(value);
-    }*/
+    }
     //
     public String toString(){
         StringBuilder sb = new StringBuilder();
