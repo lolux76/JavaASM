@@ -333,8 +333,9 @@ public class ASM {
                 return this.ch;
             case "dh":
                 return this.dh;
+            default:
+                return null;
         }
-        return null;
     }
 
     public void mov(String r1, int value){
