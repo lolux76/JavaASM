@@ -16,14 +16,8 @@ public class Register {
         this.arrayOfBit=arrayOfBit.get(debut, fin);
         this.debut=debut;
         this.fin=fin;
-    }
-    public Register(String name, BitSet arrayOfBit, int debut, int fin, Register basse, Register haute){
-        this.name=name;
-        this.arrayOfBit=arrayOfBit.get(debut, fin);
-        this.debut=debut;
-        this.fin=fin;
-        this.partieBasse = basse;
-        this.partieHaute = haute;
+        this.partieBasse = new Register(name+"basse",arrayOfBit.get(debut,fin/2),debut, fin/2);
+        this.partieHaute = new Register(name+"haute",arrayOfBit.get(fin/2,fin),fin/2, fin);
     }
     public Register(String name, BitSet arrayOfBit, int debut, int fin, int value){
         this.name=name;
@@ -39,21 +33,11 @@ public class Register {
             i++;
         }
     }
-    public Register(String name, BitSet arrayOfBit, int debut, int fin, Register basse, Register haute, int value){
-        this.name=name;
-        this.arrayOfBit=arrayOfBit;
-        this.debut=debut;
-        this.fin=fin;
-        this.partieBasse = basse;
-        this.partieHaute = haute;
-        int i=0;
-        while (value != 0) {
-            if (value % 2 == 1) {
-                this.arrayOfBit.set(i);
-            }
-            value /= 2;
-            i++;
-        }
+    public Register getPartieBasse(){
+        return this.partieBasse;
+    }
+    public Register getPartieHaute(){
+        return this.partieHaute;
     }
 
     public static void setValue(Register r1,int value){
