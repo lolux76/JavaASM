@@ -5,6 +5,24 @@ import fr.ua.javax86.model.Register;
 import java.util.BitSet;
 
 public class ASM {
+    //Bitsets
+    BitSet bs0;
+    BitSet bs1;
+    BitSet bs2;
+    BitSet bs3;
+    BitSet bs4;
+    BitSet bs5;
+    BitSet bs6;
+    BitSet bs7;
+    BitSet bs8;
+    BitSet bs9;
+    BitSet bs10;
+    BitSet bs11;
+    BitSet bs12;
+    BitSet bs13;
+    BitSet bs14;
+    BitSet bs15;
+
     //Registres de 128 bits
     Register sse;
     //Registres de 64 bits
@@ -315,8 +333,9 @@ public class ASM {
                 return this.ch;
             case "dh":
                 return this.dh;
+            default:
+                return null;
         }
-        return null;
     }
 
     public void mov(String r1, int value){

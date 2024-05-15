@@ -8,14 +8,18 @@ public class Register {
     BitSet arrayOfBit;
     int debut;
     int fin;
+    Register partieHaute;
+    Register partieBasse;
 
     public Register(String name, BitSet arrayOfBit, int debut, int fin){
         this.name=name;
         this.arrayOfBit=arrayOfBit.get(debut, fin);
         this.debut=debut;
         this.fin=fin;
+        this.partieBasse = new Register(name+"basse",arrayOfBit.get(debut,fin/2),debut, fin/2);
+        this.partieHaute = new Register(name+"haute",arrayOfBit.get(fin/2,fin),fin/2, fin);
     }
-    public Register(String name, BitSet arrayOfBit, int debut, int fin,int value){
+    public Register(String name, BitSet arrayOfBit, int debut, int fin, int value){
         this.name=name;
         this.arrayOfBit=arrayOfBit;
         this.debut=debut;
@@ -28,6 +32,12 @@ public class Register {
             value /= 2;
             i++;
         }
+    }
+    public Register getPartieBasse(){
+        return this.partieBasse;
+    }
+    public Register getPartieHaute(){
+        return this.partieHaute;
     }
 
     public static void setValue(Register r1,int value){
@@ -259,7 +269,7 @@ public class Register {
     }
 
     //
-    /*public long toSigned(){
+    public long toSigned(){
         BitSet aob = this.arrayOfBit;
         long value = 0L;
 
@@ -273,8 +283,8 @@ public class Register {
         return value;
     }
     //
-    public static long toUnsigned(Register r1){
-        BitSet aob = r1.arrayOfBit;
+    public long toUnsigned(){
+        BitSet aob = this.arrayOfBit;
         long value = 0L;
 
         for (int i = 0; i < aob.length(); ++i) {
@@ -291,7 +301,7 @@ public class Register {
     public String toOct() {
         long value = toUnsigned(); // Utiliser la méthode toUnsigned() pour obtenir la valeur non signée
         return Long.toOctalString(value);
-    }*/
+    }
     //
     public String toString(){
         StringBuilder sb = new StringBuilder();
