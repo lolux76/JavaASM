@@ -109,19 +109,19 @@ public class ASMEditor extends JFrame {
         StyledDocument doc = textPane.getStyledDocument();
         doc.setCharacterAttributes(0, doc.getLength(), new SimpleAttributeSet(), true);
         String text = textPane.getText();
-        int index = 0;
+
         for (Map.Entry<String, Color> entry : colorMap.entrySet()) {
             String word = entry.getKey();
             Color color = entry.getValue();
 
-            while ((index = text.indexOf(word, index)) >= 0) {
+            Pattern pattern = Pattern.compile("\\b" + Pattern.quote(word) + "\\b");
+            Matcher matcher = pattern.matcher(text);
+
+            while (matcher.find()) {
                 SimpleAttributeSet sas = new SimpleAttributeSet();
                 StyleConstants.setForeground(sas, color);
-
-                doc.setCharacterAttributes(index, word.length(), sas, false);
-                index += word.length();
+                doc.setCharacterAttributes(matcher.start(), word.length(), sas, false);
             }
-            index = 0;
         }
 
         // Coloration des commentaires avec point virgule (en gris)
@@ -138,9 +138,21 @@ public class ASMEditor extends JFrame {
         }
     }
 
+
     private void updateTableWithRegisters() {
-        tableModel.setRowCount(0); // Clear existing rows
+
         String text = textPane.getText();
+        Map<String, String> editorContent = new HashMap<>();
+        editorContent.put("content", text);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            objectMapper.writeValue(new File("./editeur.json"), editorContent);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        tableModel.setRowCount(0); // Clear existing rows
 
         Set<String> foundRegisters = new HashSet<>();
         for (String register : registers) {
