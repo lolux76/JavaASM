@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -40,6 +41,8 @@ public class ASMEditor extends JFrame {
         JButton runButton = new JButton("Run");
         runButton.addActionListener(e -> updateTableWithRegisters());
 
+
+
         JPanel editorPanel = new JPanel(new BorderLayout());
         editorPanel.add(textScrollPane, BorderLayout.CENTER);
         editorPanel.add(runButton, BorderLayout.SOUTH);
@@ -47,8 +50,21 @@ public class ASMEditor extends JFrame {
         mainPanel.add(editorPanel, BorderLayout.CENTER);
 
         JPanel tablePanel = new JPanel(new BorderLayout());
+        tablePanel.setPreferredSize(new Dimension(1000, 500)); // Ajustez la taille du panneau contenant le tableau
+
         tableModel = new DefaultTableModel(new Object[]{"Name", "Binary", "Hexadecimal", "Signed Decimal"}, 0);
         JTable table = new JTable(tableModel);
+
+        TableColumn column;
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            column = table.getColumnModel().getColumn(i);
+            if (i == 1) {
+                column.setPreferredWidth(600);
+            } else {
+                column.setPreferredWidth(100);
+            }
+        }
+
         JScrollPane tableScrollPane = new JScrollPane(table);
         tablePanel.add(tableScrollPane, BorderLayout.CENTER);
 
