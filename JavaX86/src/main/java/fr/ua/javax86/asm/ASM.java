@@ -194,7 +194,7 @@ public class ASM {
     }
 
     public Register parsing(String name){
-        switch (name){
+        switch (name.toLowerCase()){
             case "sse":
                 return this.sse;
             case "rax":
