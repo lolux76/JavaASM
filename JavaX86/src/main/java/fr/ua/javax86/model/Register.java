@@ -585,10 +585,16 @@ public class Register {
         long value = 0L;
 
         for (int i = 0; i < aob.length(); ++i) {
-            value += aob.get(i) ? (1L << i) : 0L; //Rajoute un bit à 1 dans value, sinon rajoute un 0 à la i-ème poisition
-            if (value >= (1L << (aob.length() - 1))) {
-                value -= (1L << aob.length());
+            if (aob.get(i)) {
+                value |= (1L << i); // Met à 1 le bit correspondant dans value
             }
+        }
+
+        // Si le bit de signe est à 1, alors il s'agit d'un nombre négatif
+        if (aob.get(this.fin)) {
+            // Calcul du complément à deux pour obtenir la valeur négative
+            value = -((1L << aob.length()) - value);
+            value += 1;
         }
 
         return value;
