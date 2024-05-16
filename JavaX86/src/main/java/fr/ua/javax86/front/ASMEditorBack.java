@@ -38,7 +38,6 @@ public class ASMEditorBack {
             return;
         }
 
-        // Diviser la ligne en mots-clés et arguments
         String[] tokens = line.split("\\s+");
         if (tokens.length < 2) {
             System.err.println("Invalid instruction: " + line);
