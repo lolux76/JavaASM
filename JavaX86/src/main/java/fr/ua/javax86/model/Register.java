@@ -25,19 +25,13 @@ public class Register {
         this.debut = debut;
         this.fin = fin;
     }
-    public Register(String name, BitSet arrayOfBit, int debut, int fin, int value){
+    public Register(String name, BitSet arrayOfBit, int debut, int fin,int value){
         this.name=name;
         this.arrayOfBit=arrayOfBit;
         this.debut=debut;
         this.fin=fin;
         int i=0;
-        while (value != 0) {
-            if (value % 2 == 1) {
-                this.arrayOfBit.set(i);
-            }
-            value /= 2;
-            i++;
-        }
+        this.arrayOfBit = BitSet.valueOf(new long[] {value});
     }
     public Register getPartieBasse(){
         return this.partieBasse;
@@ -99,17 +93,14 @@ public class Register {
         Flags.getFlags().setParityFlag(compteur % 2 == 0);
 
     }
+
+    //A revoir car il s'agit de l'addition du registre 1 au complémentaire a 2 du registre 2
     public static void sub(Register r1,Register r2){
         boolean retenue = false;
         boolean signed = r1.getArrayOfBit().get(r1.fin - 1) && r2.getArrayOfBit().get(r2.fin - 1);
-
-        for (int i = 0; i < r1.arrayOfBit.size(); i++) {
-            boolean a1 = r1.arrayOfBit.get(i);
-            boolean r1Retenu = r1.arrayOfBit.get(i) || retenue;
-            r1.arrayOfBit.set(i,r1Retenu ^ r2.arrayOfBit.get(i));
-            retenue = (!a1 && retenue) || (!r1Retenu && r2.arrayOfBit.get(i));
-        }
-
+        Register.toComp(r2);
+        Register.add(r1,r2);
+        Register.toComp(r2);
         //Carry Flag
         Flags.getFlags().setCarryFlag(retenue);
 
