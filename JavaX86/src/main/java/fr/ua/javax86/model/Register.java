@@ -8,12 +8,22 @@ public class Register {
     BitSet arrayOfBit;
     int debut;
     int fin;
+    Register partieHaute;
+    Register partieBasse;
 
     public Register(String name, BitSet arrayOfBit, int debut, int fin){
         this.name=name;
         this.arrayOfBit=arrayOfBit.get(debut, fin);
         this.debut=debut;
         this.fin=fin;
+        this.partieBasse = new Register(name+"basse",arrayOfBit.get(debut,fin/2),debut, fin/2, true);
+        this.partieHaute = new Register(name+"haute",arrayOfBit.get(fin/2,fin),fin/2, fin, true);
+    }
+    public Register(String name, BitSet arrayOfBit, int debut, int fin, boolean pourConstructeur) {
+        this.name = name;
+        this.arrayOfBit = arrayOfBit.get(debut, fin);
+        this.debut = debut;
+        this.fin = fin;
     }
     public Register(String name, BitSet arrayOfBit, int debut, int fin,int value){
         this.name=name;
@@ -22,6 +32,23 @@ public class Register {
         this.fin=fin;
         int i=0;
         this.arrayOfBit = BitSet.valueOf(new long[] {value});
+    }
+    public Register getPartieBasse(){
+        return this.partieBasse;
+    }
+    public Register getPartieHaute(){
+        return this.partieHaute;
+    }
+
+    public static void setValue(Register r1,int value){
+        int i=0;
+        while (value != 0) {
+            if (value % 2 == 1) {
+                r1.arrayOfBit.set(i);
+            }
+            value /= 2;
+            i++;
+        }
     }
 
     public static void add(Register r1,Register r2){
@@ -107,6 +134,8 @@ public class Register {
     }
 
     public static void mul(Register ax, Register al, Register operande){
+        boolean signed = al.getArrayOfBit().get(al.fin - 1) && operande.getArrayOfBit().get(operande.fin - 1);
+
         ax.getArrayOfBit().clear();
 
         for (int i = 0; i < 8; i++) {
@@ -117,9 +146,42 @@ public class Register {
             }
             al.shl(1);
         }
+
+        //Zero Flag
+        Flags.getFlags().setZeroFlag(true);
+        for(int i = ax.debut; i < ax.fin; i++){
+            if(ax.getArrayOfBit().get(i)){
+                Flags.getFlags().setZeroFlag(false);
+            }
+        }
+
+        //Overflow Flag
+        if(signed != ax.getArrayOfBit().get(ax.fin - 1)){
+            Flags.getFlags().setOverflowFlag(true);
+        }
+        else{
+            Flags.getFlags().setOverflowFlag(false);
+        }
+
+        //Sign Flag
+        Flags.getFlags().setSignFlag(ax.getArrayOfBit().get(ax.fin - 1));
+
+        //Parity Flag
+        int compteur = 0;
+        for(int i = ax.debut; i < ax.fin; i++){
+            if(ax.getArrayOfBit().get(i)){
+                compteur++;
+            }
+        }
+        Flags.getFlags().setParityFlag(compteur % 2 == 0);
+
+        //Carry Flag
+        Flags.getFlags().setCarryFlag(!ax.isHomogeneous());
     }
 
     public static void div(Register quotient, Register dividend, Register divisor, Register remainder){
+        boolean signed = dividend.getArrayOfBit().get(dividend.fin - 1) && divisor.getArrayOfBit().get(divisor.fin - 1);
+
         // Vérifier si le diviseur est zéro
         if (divisor.getArrayOfBit().isEmpty()) {
             throw new ArithmeticException("Division by zero");
@@ -152,16 +214,125 @@ public class Register {
                 sub(remainder, divisor);
             }
         }
+
+        //Zero Flag
+        Flags.getFlags().setZeroFlag(true);
+        for(int i = quotient.debut; i < quotient.fin; i++){
+            if(quotient.getArrayOfBit().get(i)){
+                Flags.getFlags().setZeroFlag(false);
+            }
+        }
+
+        //Overflow Flag
+        if(signed != quotient.getArrayOfBit().get(quotient.fin - 1)){
+            Flags.getFlags().setOverflowFlag(true);
+        }
+        else{
+            Flags.getFlags().setOverflowFlag(false);
+        }
+
+        //Sign Flag
+        Flags.getFlags().setSignFlag(quotient.getArrayOfBit().get(quotient.fin - 1));
+
+        //Parity Flag
+        int compteur = 0;
+        for(int i = quotient.debut; i < quotient.fin; i++){
+            if(quotient.getArrayOfBit().get(i)){
+                compteur++;
+            }
+        }
+        Flags.getFlags().setParityFlag(compteur % 2 == 0);
+
+        //Carry Flag
+        Flags.getFlags().setCarryFlag(!quotient.isHomogeneous());
     }
 
     public static void and(Register r1,Register r2){
         r1.arrayOfBit.and(r2.arrayOfBit);
+
+        //Zero Flag
+        Flags.getFlags().setZeroFlag(true);
+        for(int i = r1.debut; i < r1.fin; i++){
+            if(r1.getArrayOfBit().get(i)){
+                Flags.getFlags().setZeroFlag(false);
+            }
+        }
+
+        //Overflow Flag
+        Flags.getFlags().setOverflowFlag(false);
+
+        //Sign Flag
+        Flags.getFlags().setSignFlag(r1.getArrayOfBit().get(r1.fin - 1));
+
+        //Parity Flag
+        int compteur = 0;
+        for(int i = r1.debut; i < r1.fin; i++){
+            if(r1.getArrayOfBit().get(i)){
+                compteur++;
+            }
+        }
+        Flags.getFlags().setParityFlag(compteur % 2 == 0);
+
+        //Carry Flag
+        Flags.getFlags().setCarryFlag(false);
     }
     public static void or(Register r1,Register r2){
         r1.arrayOfBit.or(r2.arrayOfBit);
+
+        //Zero Flag
+        Flags.getFlags().setZeroFlag(true);
+        for(int i = r1.debut; i < r1.fin; i++){
+            if(r1.getArrayOfBit().get(i)){
+                Flags.getFlags().setZeroFlag(false);
+            }
+        }
+
+        //Overflow Flag
+        Flags.getFlags().setOverflowFlag(false);
+
+        //Sign Flag
+        Flags.getFlags().setSignFlag(r1.getArrayOfBit().get(r1.fin - 1));
+
+        //Parity Flag
+        int compteur = 0;
+        for(int i = r1.debut; i < r1.fin; i++){
+            if(r1.getArrayOfBit().get(i)){
+                compteur++;
+            }
+        }
+        Flags.getFlags().setParityFlag(compteur % 2 == 0);
+
+        //Carry Flag
+        Flags.getFlags().setCarryFlag(false);
     }
     public static void xor(Register r1,Register r2){
         r1.arrayOfBit.xor(r2.arrayOfBit);
+
+        //Zero Flag
+        Flags.getFlags().setZeroFlag(true);
+        for(int i = r1.debut; i < r1.fin; i++){
+            if(r1.getArrayOfBit().get(i)){
+                Flags.getFlags().setZeroFlag(false);
+            }
+        }
+
+        //Overflow Flag
+        Flags.getFlags().setOverflowFlag(false);
+
+        //Sign Flag
+        Flags.getFlags().setSignFlag(r1.getArrayOfBit().get(r1.fin - 1));
+
+        //Parity Flag
+        int compteur = 0;
+        for(int i = r1.debut; i < r1.fin; i++){
+            if(r1.getArrayOfBit().get(i)){
+                compteur++;
+            }
+        }
+        Flags.getFlags().setParityFlag(compteur % 2 == 0);
+
+        //Carry Flag
+        Flags.getFlags().setCarryFlag(false);
     }
 
     public BitSet getArrayOfBit() {
@@ -176,38 +347,161 @@ public class Register {
 
     public void mov(int value){
         this.arrayOfBit = BitSet.valueOf(new long[] {value});
+
+        //Zero Flag
+        Flags.getFlags().setZeroFlag(value == 0);
+
+        //Overflow Flag
+        Flags.getFlags().setOverflowFlag(false);
+
+        //Sign Flag
+        Flags.getFlags().setSignFlag(this.arrayOfBit.get(this.fin - 1));
+
+        //Parity Flag
+        int compteur = 0;
+        for(int i = this.debut; i < this.fin; i++){
+            if(this.getArrayOfBit().get(i)){
+                compteur++;
+            }
+        }
+        Flags.getFlags().setParityFlag(compteur % 2 == 0);
+
+        //Carry Flag
+        Flags.getFlags().setCarryFlag(false);
     }
 
     public void shl(int distance){
+        boolean signed = this.arrayOfBit.get(this.fin - 1);
+
+        //Carry Flag
+        Flags.getFlags().setCarryFlag(this.arrayOfBit.get(this.fin - 1));
+
         for (int i = this.arrayOfBit.size() - 1; i >= distance; i--) {
             this.arrayOfBit.set(i, this.arrayOfBit.get(i - distance));
         }
         for (int i = distance - 1; i >= 0; i--) {
             this.arrayOfBit.set(i, false);
         }
+
+        //Zero Flag
+        Flags.getFlags().setZeroFlag(true);
+        for(int i = this.debut; i < this.fin; i++){
+            if(this.arrayOfBit.get(i)){
+                Flags.getFlags().setZeroFlag(false);
+            }
+        }
+
+        //Overflow Flag
+        if(signed != this.arrayOfBit.get(this.fin - 1)){
+            Flags.getFlags().setOverflowFlag(true);
+        }
+        else{
+            Flags.getFlags().setOverflowFlag(false);
+        }
+
+        //Sign Flag
+        Flags.getFlags().setSignFlag(this.arrayOfBit.get(this.fin - 1));
+
+        //Parity Flag
+        int compteur = 0;
+        for(int i = this.debut; i < this.fin; i++){
+            if(this.getArrayOfBit().get(i)){
+                compteur++;
+            }
+        }
+        Flags.getFlags().setParityFlag(compteur % 2 == 0);
     }
 
     public static void shl(BitSet bitset, int distance) {
+        boolean signed = bitset.get(bitset.size() - 1);
+
+        //Carry Flag
+        Flags.getFlags().setCarryFlag(bitset.get(bitset.size() - 1));
+
         for (int i = bitset.size() - 1; i >= distance; i--) {
             bitset.set(i, bitset.get(i - distance));
         }
         for (int i = distance - 1; i >= 0; i--) {
             bitset.set(i, false);
         }
+
+        //Zero Flag
+        Flags.getFlags().setZeroFlag(true);
+        for(int i = 0; i < bitset.size() - 1; i++){
+            if(bitset.get(i)){
+                Flags.getFlags().setZeroFlag(false);
+            }
+        }
+
+        //Overflow Flag
+        if(signed != bitset.get(bitset.size() - 1)){
+            Flags.getFlags().setOverflowFlag(true);
+        }
+        else{
+            Flags.getFlags().setOverflowFlag(false);
+        }
+
+        //Sign Flag
+        Flags.getFlags().setSignFlag(bitset.get(bitset.size() - 1));
+
+        //Parity Flag
+        int compteur = 0;
+        for(int i = 0; i < bitset.size(); i++){
+            if(bitset.get(i)){
+                compteur++;
+            }
+        }
+        Flags.getFlags().setParityFlag(compteur % 2 == 0);
     }
 
     public void shr(int distance) {
+        boolean signed = this.getArrayOfBit().get(this.fin - 1);
+
+        //Carry Flag
+        Flags.getFlags().setCarryFlag(this.getArrayOfBit().get(this.debut));
+
         for (int i = 0; i < this.arrayOfBit.size() - distance; i++) {
             this.arrayOfBit.set(i, this.arrayOfBit.get(i + distance));
         }
         for (int i = this.arrayOfBit.size() - distance; i < this.arrayOfBit.size(); i++) {
             this.arrayOfBit.set(i, false);
         }
+
+        //Zero Flag
+        Flags.getFlags().setZeroFlag(true);
+        for(int i = 0; i < this.fin - 1; i++){
+            if(this.getArrayOfBit().get(i)){
+                Flags.getFlags().setZeroFlag(false);
+            }
+        }
+
+        //Overflow Flag
+        if(signed != this.getArrayOfBit().get(this.debut)){
+            Flags.getFlags().setOverflowFlag(true);
+        }
+        else{
+            Flags.getFlags().setOverflowFlag(false);
+        }
+
+        //Sign Flag
+        Flags.getFlags().setSignFlag(this.getArrayOfBit().get(this.fin - 1));
+
+        //Parity Flag
+        int compteur = 0;
+        for(int i = 0; i < this.fin; i++){
+            if(this.getArrayOfBit().get(i)){
+                compteur++;
+            }
+        }
+        Flags.getFlags().setParityFlag(compteur % 2 == 0);
     }
 
     public static int cmp(Register r1, Register r2) {
         int msb1 = findMostSignificantBit(r1.getArrayOfBit());
         int msb2 = findMostSignificantBit(r2.getArrayOfBit());
+
+        Flags.getFlags().setZeroFlag(false);
+        Flags.getFlags().setCarryFlag(false);
 
         if (msb1 < msb2) {
             return -1;
@@ -219,14 +513,42 @@ public class Register {
             boolean bit1 = r1.getArrayOfBit().get(i);
             boolean bit2 = r2.getArrayOfBit().get(i);
             if (bit1 != bit2) {
+                if(!bit1 && bit2)
+                {
+                    Flags.getFlags().setCarryFlag(true);
+                }
                 return bit1 ? 1 : -1;
             }
         }
+        Flags.getFlags().setZeroFlag(true);
         return 0;
     }
 
     public static void not(Register r1){
         r1.arrayOfBit.flip(0,r1.arrayOfBit.size());
+
+        //Zero Flag
+        Flags.getFlags().setZeroFlag(true);
+        for(int i = 0; i < r1.fin - 1; i++){
+            if(r1.getArrayOfBit().get(i)){
+                Flags.getFlags().setZeroFlag(false);
+            }
+        }
+
+        //Sign Flag
+        Flags.getFlags().setSignFlag(r1.getArrayOfBit().get(r1.fin - 1));
+
+        //Parity Flag
+        int compteur = 0;
+        for(int i = 0; i < r1.fin; i++){
+            if(r1.getArrayOfBit().get(i)){
+                compteur++;
+            }
+        }
+        Flags.getFlags().setParityFlag(compteur % 2 == 0);
+
+        //Carry Flag
+        Flags.getFlags().setCarryFlag(Flags.getFlags().getZeroFlag());
     }
 
     public static int findMostSignificantBit(BitSet bs) {
@@ -238,16 +560,32 @@ public class Register {
         return -1; // BitSet est zéro
     }
 
+    protected boolean isHomogeneous() {
+        boolean firstBit = this.getArrayOfBit().get(this.debut);
+        for (int i = this.debut + 1; i < this.fin; i++) {
+            if (this.getArrayOfBit().get(i) != firstBit) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     //
     public long toSigned(){
         BitSet aob = this.arrayOfBit;
         long value = 0L;
 
         for (int i = 0; i < aob.length(); ++i) {
-            value += aob.get(i) ? (1L << i) : 0L; //Rajoute un bit à 1 dans value, sinon rajoute un 0 à la i-ème poisition
-            if (value >= (1L << (aob.length() - 1))) {
-                value -= (1L << aob.length());
+            if (aob.get(i)) {
+                value |= (1L << i); // Met à 1 le bit correspondant dans value
             }
+        }
+
+        // Si le bit de signe est à 1, alors il s'agit d'un nombre négatif
+        if (aob.get(this.fin)) {
+            // Calcul du complément à deux pour obtenir la valeur négative
+            value = -((1L << aob.length()) - value);
+            value += 1;
         }
 
         return value;

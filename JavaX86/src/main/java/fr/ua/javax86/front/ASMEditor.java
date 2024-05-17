@@ -1,9 +1,13 @@
 package fr.ua.javax86.front;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.json.JSONObject;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -17,16 +21,15 @@ import java.util.regex.Pattern;
 import java.util.Map;
 
 public class ASMEditor extends JFrame {
-    private JTextPane textPane;
-    private JTable table;
-    private DefaultTableModel tableModel;
-    private Map<String, Color> colorMap = new HashMap<>();
+    private final JTextPane textPane;
+    private final DefaultTableModel tableModel;
+    private final Map<String, Color> colorMap = new HashMap<>();
     private List<String> registers;
 
     public ASMEditor() {
         super("ASM Editor");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1000, 500);
+        setSize(1500, 500);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
 
@@ -38,6 +41,8 @@ public class ASMEditor extends JFrame {
         JButton runButton = new JButton("Run");
         runButton.addActionListener(e -> updateTableWithRegisters());
 
+
+
         JPanel editorPanel = new JPanel(new BorderLayout());
         editorPanel.add(textScrollPane, BorderLayout.CENTER);
         editorPanel.add(runButton, BorderLayout.SOUTH);
@@ -45,8 +50,21 @@ public class ASMEditor extends JFrame {
         mainPanel.add(editorPanel, BorderLayout.CENTER);
 
         JPanel tablePanel = new JPanel(new BorderLayout());
+        tablePanel.setPreferredSize(new Dimension(1000, 500)); // Ajustez la taille du panneau contenant le tableau
+
         tableModel = new DefaultTableModel(new Object[]{"Name", "Binary", "Hexadecimal", "Signed Decimal"}, 0);
-        table = new JTable(tableModel);
+        JTable table = new JTable(tableModel);
+
+        TableColumn column;
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            column = table.getColumnModel().getColumn(i);
+            if (i == 1) {
+                column.setPreferredWidth(600);
+            } else {
+                column.setPreferredWidth(100);
+            }
+        }
+
         JScrollPane tableScrollPane = new JScrollPane(table);
         tablePanel.add(tableScrollPane, BorderLayout.CENTER);
 
@@ -54,7 +72,7 @@ public class ASMEditor extends JFrame {
 
         add(mainPanel);
 
-        lireConfiguration();
+        lireColoration();
 
         textPane.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent e) {
@@ -63,7 +81,7 @@ public class ASMEditor extends JFrame {
         });
     }
 
-    private void lireConfiguration() {
+    private void lireColoration() {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             Map<String, List<String>> config = objectMapper.readValue(
@@ -87,16 +105,12 @@ public class ASMEditor extends JFrame {
     }
 
     private Color getColorByName(String name) {
-        switch (name) {
-            case "registers":
-                return Color.CYAN;
-            case "numbers":
-                return Color.GREEN;
-            case "operation":
-                return Color.ORANGE;
-            default:
-                return null;
-        }
+        return switch (name) {
+            case "registers" -> Color.CYAN;
+            case "numbers" -> Color.GREEN;
+            case "operation" -> Color.ORANGE;
+            default -> null;
+        };
     }
 
     private AttributeSet createGrayAttributeSet() {
@@ -109,19 +123,19 @@ public class ASMEditor extends JFrame {
         StyledDocument doc = textPane.getStyledDocument();
         doc.setCharacterAttributes(0, doc.getLength(), new SimpleAttributeSet(), true);
         String text = textPane.getText();
-        int index = 0;
+
         for (Map.Entry<String, Color> entry : colorMap.entrySet()) {
             String word = entry.getKey();
             Color color = entry.getValue();
 
-            while ((index = text.indexOf(word, index)) >= 0) {
+            Pattern pattern = Pattern.compile("\\b" + Pattern.quote(word) + "\\b");
+            Matcher matcher = pattern.matcher(text);
+
+            while (matcher.find()) {
                 SimpleAttributeSet sas = new SimpleAttributeSet();
                 StyleConstants.setForeground(sas, color);
-
-                doc.setCharacterAttributes(index, word.length(), sas, false);
-                index += word.length();
+                doc.setCharacterAttributes(matcher.start(), word.length(), sas, false);
             }
-            index = 0;
         }
 
         // Coloration des commentaires avec point virgule (en gris)
@@ -138,21 +152,43 @@ public class ASMEditor extends JFrame {
         }
     }
 
-    private void updateTableWithRegisters() {
-        tableModel.setRowCount(0); // Clear existing rows
-        String text = textPane.getText();
 
-        Set<String> foundRegisters = new HashSet<>();
-        for (String register : registers) {
-            Pattern pattern = Pattern.compile("\\b" + register + "\\b");
-            Matcher matcher = pattern.matcher(text);
-            if (matcher.find()) {
-                foundRegisters.add(register);
-            }
+    private void updateTableWithRegisters() {
+
+        String text = textPane.getText();
+        Map<String, String> editorContent = new HashMap<>();
+        editorContent.put("content", text);
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("content", text);
+        String jsonString = jsonObject.toString();
+
+        try (FileWriter fileWriter = new FileWriter("editeur.json")) {
+            fileWriter.write(jsonString);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        for (String register : foundRegisters) {
-            tableModel.addRow(new Object[]{register, "", "", ""});
+        ASMEditorBack asmEditorBack = new ASMEditorBack();
+        asmEditorBack.interpretEditorContent();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            JsonNode rootNode = objectMapper.readTree(new File("./resultats.json"));
+            tableModel.setRowCount(0);
+
+            Iterator<Map.Entry<String, JsonNode>> fields = rootNode.fields();
+            while (fields.hasNext()) {
+                Map.Entry<String, JsonNode> field = fields.next();
+                String registerName = field.getKey();
+                JsonNode registerData = field.getValue();
+                String binaryValue = registerData.get("binary").asText();
+                String hexValue = registerData.get("hexadecimal").asText();
+                String signedDecimalValue = registerData.get("signedDecimal").asText();
+                tableModel.addRow(new Object[]{registerName, binaryValue, hexValue, signedDecimalValue});
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

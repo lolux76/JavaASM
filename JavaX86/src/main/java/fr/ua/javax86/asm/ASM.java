@@ -5,6 +5,24 @@ import fr.ua.javax86.model.Register;
 import java.util.BitSet;
 
 public class ASM {
+    //Bitsets
+    BitSet bs0;
+    BitSet bs1;
+    BitSet bs2;
+    BitSet bs3;
+    BitSet bs4;
+    BitSet bs5;
+    BitSet bs6;
+    BitSet bs7;
+    BitSet bs8;
+    BitSet bs9;
+    BitSet bs10;
+    BitSet bs11;
+    BitSet bs12;
+    BitSet bs13;
+    BitSet bs14;
+    BitSet bs15;
+
     //Registres de 128 bits
     Register sse;
     //Registres de 64 bits
@@ -82,22 +100,22 @@ public class ASM {
     Register r15b;
     public ASM(){
         //bitsets
-        BitSet bs0 = new BitSet(64);
-        BitSet bs1 = new BitSet(64);
-        BitSet bs2 = new BitSet(64);
-        BitSet bs3 = new BitSet(64);
-        BitSet bs4 = new BitSet(64);
-        BitSet bs5 = new BitSet(64);
-        BitSet bs6 = new BitSet(64);
-        BitSet bs7 = new BitSet(64);
-        BitSet bs8 = new BitSet(64);
-        BitSet bs9 = new BitSet(64);
-        BitSet bs10 = new BitSet(64);
-        BitSet bs11 = new BitSet(64);
-        BitSet bs12 = new BitSet(64);
-        BitSet bs13 = new BitSet(64);
-        BitSet bs14 = new BitSet(64);
-        BitSet bs15 = new BitSet(64);
+        bs0 = new BitSet(64);
+        bs1 = new BitSet(64);
+        bs2 = new BitSet(64);
+        bs3 = new BitSet(64);
+        bs4 = new BitSet(64);
+        bs5 = new BitSet(64);
+        bs6 = new BitSet(64);
+        bs7 = new BitSet(64);
+        bs8 = new BitSet(64);
+        bs9 = new BitSet(64);
+        bs10 = new BitSet(64);
+        bs11 = new BitSet(64);
+        bs12 = new BitSet(64);
+        bs13 = new BitSet(64);
+        bs14 = new BitSet(64);
+        bs15 = new BitSet(64);
 
         //64 bits
         rax = new Register("RAX", bs0, 0, 64);
@@ -175,149 +193,81 @@ public class ASM {
         dh = new Register("DH", bs3, 8, 16);
     }
 
-    Register parsing(String name){
-        switch (name){
-            case "sse":
-                return this.sse;
-            case "rax":
-                return this.rax;
-            case "rbx":
-                return this.rbx;
-            case "rcx":
-                return this.rcx;
-            case "rdx":
-                return this.rdx;
-            case "rsi":
-                return this.rsi;
-            case "rdi":
-                return this.rdi;
-            case "rbp":
-                return this.rbp;
-            case "rsp":
-                return this.rsp;
-            case "r8":
-                return this.r8;
-            case "r9":
-                return this.r9;
-            case "r10":
-                return this.r10;
-            case "r11":
-                return this.r11;
-            case "r12":
-                return this.r12;
-            case "r13":
-                return this.r13;
-            case "r14":
-                return this.r14;
-            case "r15":
-                return this.r15;
-            case "eax":
-                return this.eax;
-            case "ebx":
-                return this.ebx;
-            case "ecx":
-                return this.ecx;
-            case "edx":
-                return this.edx;
-            case "esi":
-                return this.esi;
-            case "edi":
-                return this.edi;
-            case "ebp":
-                return this.ebp;
-            case "esp":
-                return this.esp;
-            case "r8d":
-                return this.r8d;
-            case "r9d":
-                return this.r9d;
-            case "r10d":
-                return this.r10d;
-            case "r11d":
-                return this.r11d;
-            case "r12d":
-                return this.r12d;
-            case "r13d":
-                return this.r13d;
-            case "r14d":
-                return this.r14d;
-            case "r15d":
-                return this.r15d;
-            case "ax":
-                return this.ax;
-            case "bx":
-                return this.bx;
-            case "cx":
-                return this.cx;
-            case "dx":
-                return this.dx;
-            case "si":
-                return this.si;
-            case "di":
-                return this.di;
-            case "bp":
-                return this.bp;
-            case "sp":
-                return this.sp;
-            case "r8w":
-                return this.r8w;
-            case "r9w":
-                return this.r9w;
-            case "r10w":
-                return this.r10w;
-            case "r11w":
-                return this.r11w;
-            case "r12w":
-                return this.r12w;
-            case "r13w":
-                return this.r13w;
-            case "r14w":
-                return this.r14w;
-            case "r15w":
-                return this.r15w;
-            case "al":
-                return this.al;
-            case "bl":
-                return this.bl;
-            case "cl":
-                return this.cl;
-            case "dl":
-                return this.dl;
-            case "sil":
-                return this.sil;
-            case "dil":
-                return this.dil;
-            case "bpl":
-                return this.bpl;
-            case "spl":
-                return this.spl;
-            case "r8b":
-                return this.r8b;
-            case "r9b":
-                return this.r9b;
-            case "r10b":
-                return this.r10b;
-            case "r11b":
-                return this.r11b;
-            case "r12b":
-                return this.r12b;
-            case "r13b":
-                return this.r13b;
-            case "r14b":
-                return this.r14b;
-            case "r15b":
-                return this.r15b;
-            case "ah":
-                return this.ah;
-            case "bh":
-                return this.bh;
-            case "ch":
-                return this.ch;
-            case "dh":
-                return this.dh;
-        }
-        return null;
+    public Register parsing(String name){
+        return switch (name.toLowerCase()) {
+            case "sse" -> this.sse;
+            case "rax" -> this.rax;
+            case "rbx" -> this.rbx;
+            case "rcx" -> this.rcx;
+            case "rdx" -> this.rdx;
+            case "rsi" -> this.rsi;
+            case "rdi" -> this.rdi;
+            case "rbp" -> this.rbp;
+            case "rsp" -> this.rsp;
+            case "r8" -> this.r8;
+            case "r9" -> this.r9;
+            case "r10" -> this.r10;
+            case "r11" -> this.r11;
+            case "r12" -> this.r12;
+            case "r13" -> this.r13;
+            case "r14" -> this.r14;
+            case "r15" -> this.r15;
+            case "eax" -> this.eax;
+            case "ebx" -> this.ebx;
+            case "ecx" -> this.ecx;
+            case "edx" -> this.edx;
+            case "esi" -> this.esi;
+            case "edi" -> this.edi;
+            case "ebp" -> this.ebp;
+            case "esp" -> this.esp;
+            case "r8d" -> this.r8d;
+            case "r9d" -> this.r9d;
+            case "r10d" -> this.r10d;
+            case "r11d" -> this.r11d;
+            case "r12d" -> this.r12d;
+            case "r13d" -> this.r13d;
+            case "r14d" -> this.r14d;
+            case "r15d" -> this.r15d;
+            case "ax" -> this.ax;
+            case "bx" -> this.bx;
+            case "cx" -> this.cx;
+            case "dx" -> this.dx;
+            case "si" -> this.si;
+            case "di" -> this.di;
+            case "bp" -> this.bp;
+            case "sp" -> this.sp;
+            case "r8w" -> this.r8w;
+            case "r9w" -> this.r9w;
+            case "r10w" -> this.r10w;
+            case "r11w" -> this.r11w;
+            case "r12w" -> this.r12w;
+            case "r13w" -> this.r13w;
+            case "r14w" -> this.r14w;
+            case "r15w" -> this.r15w;
+            case "al" -> this.al;
+            case "bl" -> this.bl;
+            case "cl" -> this.cl;
+            case "dl" -> this.dl;
+            case "sil" -> this.sil;
+            case "dil" -> this.dil;
+            case "bpl" -> this.bpl;
+            case "spl" -> this.spl;
+            case "r8b" -> this.r8b;
+            case "r9b" -> this.r9b;
+            case "r10b" -> this.r10b;
+            case "r11b" -> this.r11b;
+            case "r12b" -> this.r12b;
+            case "r13b" -> this.r13b;
+            case "r14b" -> this.r14b;
+            case "r15b" -> this.r15b;
+            case "ah" -> this.ah;
+            case "bh" -> this.bh;
+            case "ch" -> this.ch;
+            case "dh" -> this.dh;
+            default -> null;
+        };
     }
+
 
     public void mov(String r1, int value){
         Register Registre1 = this.parsing(r1);
