@@ -591,7 +591,7 @@ public class Register {
         }
 
         // Si le bit de signe est à 1, alors il s'agit d'un nombre négatif
-        if (aob.get(this.fin)) {
+        if (aob.get(this.fin-1)) {
             // Calcul du complément à deux pour obtenir la valeur négative
             value = -((1L << aob.length()) - value);
             value += 1;
