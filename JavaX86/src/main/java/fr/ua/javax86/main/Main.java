@@ -14,6 +14,16 @@ public class Main {
 
         ASM asm = new ASM();
 
+        asm.mov("ah", -2);
+        asm.mov("ebx", -2);
+
+        System.out.println("ah (-2) : " + (asm.toString("ah")));
+        System.out.println("ebx (-2) : " + (asm.toString("ebx")));
+        System.out.println("ah (-2) en unsigned : " + (asm.toUnsigned("ah")));
+        System.out.println("ebx (-2) en unsigned : " + (asm.toUnsigned("ebx")));
+        System.out.println("ah (-2) en signed : " + (asm.toSigned("ah")));
+        System.out.println("ebx (-2) en signed : " + (asm.toSigned("ebx")));
+
         asm.mov("dh", 2);
         asm.mov("eax", 15);
 

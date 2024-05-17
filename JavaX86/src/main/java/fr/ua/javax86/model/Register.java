@@ -595,7 +595,7 @@ public class Register {
         BitSet aob = this.arrayOfBit;
         long value = 0L;
 
-        for (int i = 0; i < aob.length(); ++i) {
+        for (int i = 0; i < this.fin; ++i) {
             value += aob.get(i) ? (1L << i) : 0L; //Rajoute un bit à 1 dans value, sinon rajoute un 0 à la i-ème poisition
         }
         return value;
@@ -614,7 +614,7 @@ public class Register {
     public String toString(){
         StringBuilder sb = new StringBuilder();
         int white_space = 0;
-        for (int i = this.arrayOfBit.size() - 1; i >= 0; i--) {
+        for (int i = this.fin - 1; i >= 0; i--) {
             sb.append(this.arrayOfBit.get(i) ? '1' : '0');
             white_space++;
             if(white_space == 4){
