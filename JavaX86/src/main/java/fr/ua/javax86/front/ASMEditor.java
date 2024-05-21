@@ -23,6 +23,7 @@ import java.util.Map;
 public class ASMEditor extends JFrame {
     private final JTextPane textPane;
     private final DefaultTableModel tableModel;
+    JTextField textFlags = new JTextField();
     private final Map<String, Color> colorMap = new HashMap<>();
     private List<String> registers;
 
@@ -42,7 +43,6 @@ public class ASMEditor extends JFrame {
         runButton.addActionListener(e -> updateTableWithRegisters());
 
 
-
         JPanel editorPanel = new JPanel(new BorderLayout());
         editorPanel.add(textScrollPane, BorderLayout.CENTER);
         editorPanel.add(runButton, BorderLayout.SOUTH);
@@ -54,6 +54,10 @@ public class ASMEditor extends JFrame {
 
         tableModel = new DefaultTableModel(new Object[]{"Name", "Binary", "Hexadecimal", "Signed Decimal"}, 0);
         JTable table = new JTable(tableModel);
+
+
+        textFlags.setEditable(false); // Make it non-editable
+        tablePanel.add(textFlags, BorderLayout.SOUTH);
 
         TableColumn column;
         for (int i = 0; i < table.getColumnCount(); i++) {
@@ -184,15 +188,25 @@ public class ASMEditor extends JFrame {
             JsonNode rootNode = objectMapper.readTree(new File("./resultats.json"));
             tableModel.setRowCount(0);
 
+
             Iterator<Map.Entry<String, JsonNode>> fields = rootNode.fields();
             while (fields.hasNext()) {
                 Map.Entry<String, JsonNode> field = fields.next();
                 String registerName = field.getKey();
                 JsonNode registerData = field.getValue();
-                String binaryValue = registerData.get("binary").asText();
-                String hexValue = registerData.get("hexadecimal").asText();
-                String signedDecimalValue = registerData.get("signedDecimal").asText();
-                tableModel.addRow(new Object[]{registerName, binaryValue, hexValue, signedDecimalValue});
+
+                if (registerData.isObject()) { // Vérifiez si le nœud est un objet
+                    String binaryValue = registerData.get("binary").asText();
+                    String hexValue = registerData.get("hexadecimal").asText();
+                    String signedDecimalValue = registerData.get("signedDecimal").asText();
+                    tableModel.addRow(new Object[]{registerName, binaryValue, hexValue, signedDecimalValue});
+                } else if (registerData.isTextual() && registerName.equals("flags")) {
+
+                    JsonNode flagsNode = rootNode.get("flags"); // Assume that flags are stored in the "flags" field
+                    String flagsText = flagsNode != null ? flagsNode.asText() : "No flags";
+
+                    textFlags.setText("Flags: "+flagsText);
+                }
             }
         } catch (IOException e) {
             System.err.println("Erreur d'écriture dans le tableau");;
