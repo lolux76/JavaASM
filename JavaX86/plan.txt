@@ -1,0 +1,12 @@
+1 - Introduction
+    gngngn l'assemnbleur c'est chiant mais pratique
+2 - Organisation de notre programme
+    a) ASM
+        gngngn, on a utilisé 16 bitsets de 64 bits pour différencier les différents registres
+        Ensuite on a initialisé des les registres sur leurs parties nécessaires
+    b) Registers
+        gngngn opérations mathématiques et logiques sur ces registres, parfois on utilise des parties hautes et basses (pour div par exemple)
+    c) Interface graphique
+        gngngn on utilise Java Swing (sur le dance floor) pour faire un éditeur de texte avec une coloration des différents trucs qu'on peut utiliser
+        À cet éditeur est associé un tableau de données correspondant aux données utilisées (si on utilise un registre eax, on aura sa représentation sous forme binaire, hexa, décimale ...)
+3 -
