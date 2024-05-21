@@ -107,7 +107,6 @@ public class ASMEditor extends JFrame {
     private Color getColorByName(String name) {
         return switch (name) {
             case "registers" -> Color.CYAN;
-            case "numbers" -> Color.GREEN;
             case "operation" -> Color.ORANGE;
             default -> null;
         };
@@ -136,6 +135,14 @@ public class ASMEditor extends JFrame {
                 StyleConstants.setForeground(sas, color);
                 doc.setCharacterAttributes(matcher.start(), word.length(), sas, false);
             }
+        }
+        // Coloration des nombres (positifs et négatifs)
+        Pattern numberPattern = Pattern.compile("\\b-?\\d+\\b");
+        Matcher numberMatcher = numberPattern.matcher(text);
+        while (numberMatcher.find()) {
+            SimpleAttributeSet numberSas = new SimpleAttributeSet();
+            StyleConstants.setForeground(numberSas, Color.GREEN);
+            doc.setCharacterAttributes(numberMatcher.start(), numberMatcher.end() - numberMatcher.start(), numberSas, false);
         }
 
         // Coloration des commentaires avec point virgule (en gris)

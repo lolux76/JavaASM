@@ -145,10 +145,41 @@ public class Register {
         Flags.getFlags().setParityFlag(compteur % 2 == 0);
     }
 
-    public static void mul(Register ax, Register al, Register operande){
-        boolean signed = al.getArrayOfBit().get(al.fin - 1) && operande.getArrayOfBit().get(operande.fin - 1);
+    public static void mul(Register r1, Register r2, Register operande){
+        boolean signed = r2.getArrayOfBit().get(r2.fin - 1) && operande.getArrayOfBit().get(operande.fin - 1);
 
-        ax.getArrayOfBit().clear();
+        r1.getArrayOfBit().clear();
+
+        // Créer une copie de operande pour ne pas modifier l'original
+        BitSet multiplicand = (BitSet) operande.getArrayOfBit().clone();
+
+        // BitSet pour stocker temporairement les résultats intermédiaires
+        Register temp = new Register("temp", new BitSet(128), 0, 128);
+
+        // Parcourir chaque bit de l'operande
+        for (int i = operande.debut; i < operande.fin; i++) {
+            if (operande.getArrayOfBit().get(i)) {
+                // Si le bit i de operande est 1, ajouter multiplicand décalé de i à r2
+                temp.setArrayOfBit((BitSet) multiplicand.clone());
+                temp.shl(i);
+                add(r2, temp);
+            }
+        }
+
+        // Stocker le résultat final dans r1 et r2
+        // r1 contient les bits les plus significatifs
+        // r2 contient les bits les moins significatifs
+        // Par exemple, si r2 dépasse la capacité de BitSet, les bits supplémentaires vont dans r1
+
+        // On considère que la taille des registres r1 et r2 est fixe et égale à length
+        for (int i = r2.debut; i < r2.fin; i++) {
+            if (r2.getArrayOfBit().get(i)) {
+                r1.getArrayOfBit().set(i - r2.fin);
+            }
+        }
+
+
+        /*ax.getArrayOfBit().clear();
 
         for (int i = 0; i < 8; i++) {
             if (operande.getArrayOfBit().get(i)) {
@@ -157,18 +188,18 @@ public class Register {
                 ax.getArrayOfBit().xor(shifted);
             }
             al.shl(1);
-        }
+        }*/
 
         //Zero Flag
         Flags.getFlags().setZeroFlag(true);
-        for(int i = ax.debut; i < ax.fin; i++){
-            if(ax.getArrayOfBit().get(i)){
+        for(int i = r1.debut; i < r1.fin; i++){
+            if(r1.getArrayOfBit().get(i)){
                 Flags.getFlags().setZeroFlag(false);
             }
         }
 
         //Overflow Flag
-        if(signed != ax.getArrayOfBit().get(ax.fin - 1)){
+        if(signed != r1.getArrayOfBit().get(r1.fin - 1)){
             Flags.getFlags().setOverflowFlag(true);
         }
         else{
@@ -176,19 +207,19 @@ public class Register {
         }
 
         //Sign Flag
-        Flags.getFlags().setSignFlag(ax.getArrayOfBit().get(ax.fin - 1));
+        Flags.getFlags().setSignFlag(r1.getArrayOfBit().get(r1.fin - 1));
 
         //Parity Flag
         int compteur = 0;
-        for(int i = ax.debut; i < ax.fin; i++){
-            if(ax.getArrayOfBit().get(i)){
+        for(int i = r1.debut; i < r1.fin; i++){
+            if(r1.getArrayOfBit().get(i)){
                 compteur++;
             }
         }
         Flags.getFlags().setParityFlag(compteur % 2 == 0);
 
         //Carry Flag
-        Flags.getFlags().setCarryFlag(!ax.isHomogeneous());
+        Flags.getFlags().setCarryFlag(!r1.isHomogeneous());
     }
 
     public static void div(Register quotient, Register dividend, Register divisor, Register remainder){
@@ -594,7 +625,7 @@ public class Register {
         }
 
         // Si le bit de signe est à 1, alors il s'agit d'un nombre négatif
-        if (aob.get(this.fin)) {
+        if (aob.get(this.fin-1)) {
             // Calcul du complément à deux pour obtenir la valeur négative
             value = -((1L << aob.length()) - value);
             value += 1;
@@ -607,7 +638,7 @@ public class Register {
         BitSet aob = this.arrayOfBit;
         long value = 0L;
 
-        for (int i = 0; i < aob.length(); ++i) {
+        for (int i = 0; i < this.fin; ++i) {
             value += aob.get(i) ? (1L << i) : 0L; //Rajoute un bit à 1 dans value, sinon rajoute un 0 à la i-ème poisition
         }
         return value;
@@ -626,7 +657,7 @@ public class Register {
     public String toString(){
         StringBuilder sb = new StringBuilder();
         int white_space = 0;
-        for (int i = this.arrayOfBit.size() - 1; i >= 0; i--) {
+        for (int i = this.fin - 1; i >= 0; i--) {
             sb.append(this.arrayOfBit.get(i) ? '1' : '0');
             white_space++;
             if(white_space == 4){
