@@ -138,45 +138,20 @@ public class Register {
 
         r1.getArrayOfBit().clear();
 
-        // Créer une copie de operande pour ne pas modifier l'original
-        BitSet multiplicand = (BitSet) operande.getArrayOfBit().clone();
-
-        // BitSet pour stocker temporairement les résultats intermédiaires
-        Register temp = new Register("temp", new BitSet(128), 0, 128);
-
-        // Parcourir chaque bit de l'operande
         for (int i = operande.debut; i < operande.fin; i++) {
             if (operande.getArrayOfBit().get(i)) {
-                // Si le bit i de operande est 1, ajouter multiplicand décalé de i à r2
-                temp.setArrayOfBit((BitSet) multiplicand.clone());
-                temp.shl(i);
-                add(r2, temp);
+                BitSet shifted = new BitSet(128);
+                shifted.or(r2.getArrayOfBit());
+                if(i < r1.fin){
+                    r1.getArrayOfBit().xor(shifted);
+                }
+                else{
+                    r2.getArrayOfBit().xor(shifted);
+                }
             }
+            r1.shl(1);
+            r2.shl(1);
         }
-
-        // Stocker le résultat final dans r1 et r2
-        // r1 contient les bits les plus significatifs
-        // r2 contient les bits les moins significatifs
-        // Par exemple, si r2 dépasse la capacité de BitSet, les bits supplémentaires vont dans r1
-
-        // On considère que la taille des registres r1 et r2 est fixe et égale à length
-        for (int i = r2.debut; i < r2.fin; i++) {
-            if (r2.getArrayOfBit().get(i)) {
-                r1.getArrayOfBit().set(i - r2.fin);
-            }
-        }
-
-
-        /*ax.getArrayOfBit().clear();
-
-        for (int i = 0; i < 8; i++) {
-            if (operande.getArrayOfBit().get(i)) {
-                BitSet shifted = new BitSet(8);
-                shifted.or(al.getArrayOfBit());
-                ax.getArrayOfBit().xor(shifted);
-            }
-            al.shl(1);
-        }*/
 
         //Zero Flag
         Flags.getFlags().setZeroFlag(true);
