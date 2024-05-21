@@ -593,7 +593,7 @@ public class Register {
         BitSet aob = this.arrayOfBit;
         long value = 0L;
 
-        for (int i = 0; i < aob.length(); ++i) {
+        for (int i = 0; i < this.fin; ++i) {
             if (aob.get(i)) {
                 value |= (1L << i); // Met à 1 le bit correspondant dans value
             }
