@@ -638,7 +638,7 @@ public class Register {
     }
 
     public int getSize(){
-        return this.arrayOfBit.size();
+        return this.fin - this.debut;
     }
 
     public static void toComp(Register r1){
