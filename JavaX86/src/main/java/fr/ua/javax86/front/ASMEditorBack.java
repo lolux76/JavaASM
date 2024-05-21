@@ -163,7 +163,7 @@ public class ASMEditorBack {
                 ObjectNode registerNode = results.putObject(reg);
                 registerNode.put("binary", register.toString());
                 registerNode.put("hexadecimal", register.toHex());
-                registerNode.put("signedDecimal", register.toUnsigned());
+                registerNode.put("signedDecimal", register.toSigned());
             }
 
             objectMapper.writeValue(new File("./resultats.json"), results);
