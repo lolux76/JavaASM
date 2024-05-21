@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import fr.ua.javax86.asm.ASM;
+import fr.ua.javax86.model.Flags;
 import fr.ua.javax86.model.Register;
 
 import java.io.File;
@@ -165,6 +166,8 @@ public class ASMEditorBack {
                 registerNode.put("hexadecimal", register.toHex());
                 registerNode.put("signedDecimal", register.toSigned());
             }
+
+            results.put("flags",Flags.getFlags().toString());
 
             objectMapper.writeValue(new File("./resultats.json"), results);
         } catch (IOException e) {
