@@ -50,7 +50,7 @@ public class ASMEditor extends JFrame {
         mainPanel.add(editorPanel, BorderLayout.CENTER);
 
         JPanel tablePanel = new JPanel(new BorderLayout());
-        tablePanel.setPreferredSize(new Dimension(1000, 500)); // Ajustez la taille du panneau contenant le tableau
+        tablePanel.setPreferredSize(new Dimension(1000, 500));
 
         tableModel = new DefaultTableModel(new Object[]{"Name", "Binary", "Hexadecimal", "Signed Decimal"}, 0);
         JTable table = new JTable(tableModel);
@@ -100,7 +100,7 @@ public class ASMEditor extends JFrame {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Erreur de lecture de la coloration");;
         }
     }
 
@@ -173,7 +173,7 @@ public class ASMEditor extends JFrame {
         try (FileWriter fileWriter = new FileWriter("editeur.json")) {
             fileWriter.write(jsonString);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Erreur d'ecriture dans l'editeur");;
         }
 
         ASMEditorBack asmEditorBack = new ASMEditorBack();
@@ -195,7 +195,7 @@ public class ASMEditor extends JFrame {
                 tableModel.addRow(new Object[]{registerName, binaryValue, hexValue, signedDecimalValue});
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Erreur d'écriture dans le tableau");;
         }
     }
 
