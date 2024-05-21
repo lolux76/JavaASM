@@ -29,7 +29,7 @@ public class ASMEditorBack {
 
             saveResultsToJson();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Impossible d'interpréter l'éditeur");
         }
     }
 
@@ -168,7 +168,7 @@ public class ASMEditorBack {
 
             objectMapper.writeValue(new File("./resultats.json"), results);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Impossible de lire les résultats ");;
         }
     }
 }
