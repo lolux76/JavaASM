@@ -148,16 +148,28 @@ public class Register {
     public static void mul(Register r1, Register r2, Register operande){
         boolean signed = r2.getArrayOfBit().get(r2.fin - 1) && operande.getArrayOfBit().get(operande.fin - 1);
 
-        r1.getArrayOfBit().clear();
+        BitSet result =  new BitSet(r2.getSize()*2);
 
         for (int i = operande.debut; i < operande.fin; i++) {
             if (operande.getArrayOfBit().get(i)) {
-                BitSet shifted = new BitSet(128);
-                shifted.or(r2.getArrayOfBit());
-                r1.getArrayOfBit().xor(shifted);
+                boolean retenue = false;
+                for(int j=0;j<result.size();j++){
+                    boolean a1 = result.get(j);
+                    result.set(j,result.get(j) ^ r2.arrayOfBit.get(j) ^ retenue); //addition de chaque bit 1 à 1
+                    retenue = (a1 & retenue) | (r2.arrayOfBit.get(j) & retenue) | (a1 & r2.arrayOfBit.get(j)); //Retenue si au moins 2 bit à 1
+                }
             }
-            r1.shl(1);
+            r2.shl(1);
         }
+        r2.getArrayOfBit().clear();
+        for (int i = 0; i < r2.getSize(); i++) {
+            r2.getArrayOfBit().set(i,result.get(i));
+        }
+        r1.getArrayOfBit().clear();
+        for (int i = r2.getSize(); i < r2.getSize()*2; i++) {
+            r1.getArrayOfBit().set(i-r2.getSize(),result.get(i));
+        }
+
 
         //Zero Flag
         Flags.getFlags().setZeroFlag(true);

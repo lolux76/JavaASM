@@ -340,6 +340,7 @@ public class ASM {
     }
     public void mul(String r1){
         Register Registre1 = this.parsing(r1);
+        System.out.println(Registre1.getSize());
         switch (Registre1.getSize()){
             case 8 :
                 Register.mul(this.ax, this.al, Registre1);
