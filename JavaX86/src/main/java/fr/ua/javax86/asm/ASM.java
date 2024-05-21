@@ -24,7 +24,22 @@ public class ASM {
     BitSet bs15;
 
     //Registres de 128 bits
-    Register sse;
+    Register xmm0;
+    Register xmm1;
+    Register xmm2;
+    Register xmm3;
+    Register xmm4;
+    Register xmm5;
+    Register xmm6;
+    Register xmm7;
+    Register xmm8;
+    Register xmm9;
+    Register xmm10;
+    Register xmm11;
+    Register xmm12;
+    Register xmm13;
+    Register xmm14;
+    Register xmm15;
     //Registres de 64 bits
     Register rax;
     Register rbx;
@@ -100,22 +115,40 @@ public class ASM {
     Register r15b;
     public ASM(){
         //bitsets
-        bs0 = new BitSet(64);
-        bs1 = new BitSet(64);
-        bs2 = new BitSet(64);
-        bs3 = new BitSet(64);
-        bs4 = new BitSet(64);
-        bs5 = new BitSet(64);
-        bs6 = new BitSet(64);
-        bs7 = new BitSet(64);
-        bs8 = new BitSet(64);
-        bs9 = new BitSet(64);
-        bs10 = new BitSet(64);
-        bs11 = new BitSet(64);
-        bs12 = new BitSet(64);
-        bs13 = new BitSet(64);
-        bs14 = new BitSet(64);
-        bs15 = new BitSet(64);
+        bs0 = new BitSet(128);
+        bs1 = new BitSet(128);
+        bs2 = new BitSet(128);
+        bs3 = new BitSet(128);
+        bs4 = new BitSet(128);
+        bs5 = new BitSet(128);
+        bs6 = new BitSet(128);
+        bs7 = new BitSet(128);
+        bs8 = new BitSet(128);
+        bs9 = new BitSet(128);
+        bs10 = new BitSet(128);
+        bs11 = new BitSet(128);
+        bs12 = new BitSet(128);
+        bs13 = new BitSet(128);
+        bs14 = new BitSet(128);
+        bs15 = new BitSet(128);
+
+        //128 bits
+        xmm0 = new Register("XMM0", bs0, 0, 128);
+        xmm1 = new Register("XMM1", bs1, 0, 128);
+        xmm2 = new Register("XMM2", bs2, 0, 128);
+        xmm3 = new Register("XMM3", bs3, 0, 128);
+        xmm4 = new Register("XMM4", bs4, 0, 128);
+        xmm5 = new Register("XMM5", bs5, 0, 128);
+        xmm6 = new Register("XMM6", bs6, 0, 128);
+        xmm7 = new Register("XMM7", bs7, 0, 128);
+        xmm8 = new Register("XMM8", bs8, 0, 128);
+        xmm9 = new Register("XMM9", bs9, 0, 128);
+        xmm10 = new Register("XMM10", bs10, 0, 128);
+        xmm11 = new Register("XMM11", bs11, 0, 128);
+        xmm12 = new Register("XMM12", bs12, 0, 128);
+        xmm13 = new Register("XMM13", bs13, 0, 128);
+        xmm14 = new Register("XMM14", bs14, 0, 128);
+        xmm15 = new Register("XMM15", bs15, 0, 128);
 
         //64 bits
         rax = new Register("RAX", bs0, 0, 64);
@@ -195,7 +228,22 @@ public class ASM {
 
     public Register parsing(String name){
         return switch (name.toLowerCase()) {
-            case "sse" -> this.sse;
+            case "xmm0" -> this.xmm0;
+            case "xmm1" -> this.xmm1;
+            case "xmm2" -> this.xmm2;
+            case "xmm3" -> this.xmm3;
+            case "xmm4" -> this.xmm4;
+            case "xmm5" -> this.xmm5;
+            case "xmm6" -> this.xmm6;
+            case "xmm7" -> this.xmm7;
+            case "xmm8" -> this.xmm8;
+            case "xmm9" -> this.xmm9;
+            case "xmm10" -> this.xmm10;
+            case "xmm11" -> this.xmm11;
+            case "xmm12" -> this.xmm12;
+            case "xmm13" -> this.xmm13;
+            case "xmm14" -> this.xmm14;
+            case "xmm15" -> this.xmm15;
             case "rax" -> this.rax;
             case "rbx" -> this.rbx;
             case "rcx" -> this.rcx;
