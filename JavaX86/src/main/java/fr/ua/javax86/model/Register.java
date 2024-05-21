@@ -96,13 +96,25 @@ public class Register {
 
     //A revoir car il s'agit de l'addition du registre 1 au complémentaire a 2 du registre 2
     public static void sub(Register r1,Register r2){
-        boolean retenue = false;
+        BitSet retenue = new BitSet(r1.getSize());
         boolean signed = r1.getArrayOfBit().get(r1.fin - 1) && r2.getArrayOfBit().get(r2.fin - 1);
-        Register.toComp(r2);
-        Register.add(r1,r2);
-        Register.toComp(r2);
+        for (int i = 0; i < r1.getSize(); i++) {
+            boolean r1Bis = r1.arrayOfBit.get(i);
+            boolean r2Bis = r2.arrayOfBit.get(i);
+            boolean retenusBis = retenue.get(i);
+
+            // Calculate the current result bit
+            boolean resultBit = (r1Bis ^ r2Bis) ^ retenusBis;
+            r1.arrayOfBit.set(i, resultBit);
+
+            // Calculate the borrow for the next bit
+            boolean newBorrow = (!r1Bis && (r2Bis || retenusBis)) || (r2Bis && retenusBis);
+            if (newBorrow) {
+                retenue.set(i + 1);
+            }
+        }
         //Carry Flag
-        Flags.getFlags().setCarryFlag(retenue);
+        Flags.getFlags().setCarryFlag(retenue.get(r1.getSize()));
 
         //Zero Flag
         Flags.getFlags().setZeroFlag(true);
