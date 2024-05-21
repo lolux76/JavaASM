@@ -347,8 +347,14 @@ public class ASM {
             case 16 :
                 Register.mul(this.dx, this.ax, Registre1);
                 break;
-            default:
+            case 32 :
                 Register.mul(this.edx, this.eax, Registre1);
+                break;
+            case 64 :
+                Register.mul(this.rdx, this.rax, Registre1);
+                break;
+            default:
+                Register.mul(this.xmm3, this.xmm0, Registre1);
                 break;
         }
     }
