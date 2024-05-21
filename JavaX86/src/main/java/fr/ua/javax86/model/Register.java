@@ -154,15 +154,9 @@ public class Register {
             if (operande.getArrayOfBit().get(i)) {
                 BitSet shifted = new BitSet(128);
                 shifted.or(r2.getArrayOfBit());
-                if(i < r1.fin){
-                    r1.getArrayOfBit().xor(shifted);
-                }
-                else{
-                    r2.getArrayOfBit().xor(shifted);
-                }
+                r1.getArrayOfBit().xor(shifted);
             }
             r1.shl(1);
-            r2.shl(1);
         }
 
         //Zero Flag
