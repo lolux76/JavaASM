@@ -94,6 +94,8 @@ public class ASMEditorBack {
                     String reg = args[0].trim();
                     asm.mul(reg);
                     usedRegisters.add(reg);
+                    usedRegisters.add("edx");
+
                 } else {
                     System.err.println("Invalid mul instruction: " + line);
                 }
@@ -103,6 +105,7 @@ public class ASMEditorBack {
                     String reg = args[0].trim();
                     asm.div(reg);
                     usedRegisters.add(reg);
+                    usedRegisters.add("edx");
                 } else {
                     System.err.println("Invalid div instruction: " + line);
                 }
