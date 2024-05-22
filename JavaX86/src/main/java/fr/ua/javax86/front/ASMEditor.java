@@ -52,11 +52,16 @@ public class ASMEditor extends JFrame {
         JPanel tablePanel = new JPanel(new BorderLayout());
         tablePanel.setPreferredSize(new Dimension(1000, 500));
 
-        tableModel = new DefaultTableModel(new Object[]{"Name", "Binary", "Hexadecimal", "Signed Decimal"}, 0);
+        tableModel =new DefaultTableModel(new Object[]{"Name", "Binary", "Hexadecimal", "Signed Decimal"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         JTable table = new JTable(tableModel);
 
 
-        textFlags.setEditable(false); // Make it non-editable
+        textFlags.setEditable(false);
         tablePanel.add(textFlags, BorderLayout.SOUTH);
 
         TableColumn column;
@@ -195,14 +200,14 @@ public class ASMEditor extends JFrame {
                 String registerName = field.getKey();
                 JsonNode registerData = field.getValue();
 
-                if (registerData.isObject()) { // Vérifiez si le nœud est un objet
+                if (registerData.isObject()) {
                     String binaryValue = registerData.get("binary").asText();
                     String hexValue = registerData.get("hexadecimal").asText();
                     String signedDecimalValue = registerData.get("signedDecimal").asText();
                     tableModel.addRow(new Object[]{registerName, binaryValue, hexValue, signedDecimalValue});
                 } else if (registerData.isTextual() && registerName.equals("flags")) {
 
-                    JsonNode flagsNode = rootNode.get("flags"); // Assume that flags are stored in the "flags" field
+                    JsonNode flagsNode = rootNode.get("flags");
                     String flagsText = flagsNode != null ? flagsNode.asText() : "No flags";
 
                     textFlags.setText("Flags: "+flagsText);
