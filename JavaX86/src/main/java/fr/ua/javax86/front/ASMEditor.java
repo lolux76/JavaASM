@@ -30,13 +30,15 @@ public class ASMEditor extends JFrame {
     public ASMEditor() {
         super("ASM Editor");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1500, 500);
+        setSize(1200, 500);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
 
         textPane = new JTextPane();
         textPane.setBackground(Color.BLACK);
         textPane.setForeground(Color.WHITE);
+        textPane.setFont(new Font("Monospaced", Font.PLAIN, 16));
+
         JScrollPane textScrollPane = new JScrollPane(textPane);
 
         JButton runButton = new JButton("Run");
@@ -50,7 +52,7 @@ public class ASMEditor extends JFrame {
         mainPanel.add(editorPanel, BorderLayout.CENTER);
 
         JPanel tablePanel = new JPanel(new BorderLayout());
-        tablePanel.setPreferredSize(new Dimension(1000, 500));
+        tablePanel.setPreferredSize(new Dimension(900, 500));
 
         tableModel =new DefaultTableModel(new Object[]{"Name", "Binary", "Hexadecimal", "Signed Decimal"}, 0) {
             @Override
