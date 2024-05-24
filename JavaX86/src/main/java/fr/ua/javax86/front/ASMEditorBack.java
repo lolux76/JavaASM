@@ -21,13 +21,10 @@ public class ASMEditorBack {
         try {
             JsonNode rootNode = objectMapper.readTree(new File("./editeur.json"));
             String editorContent = rootNode.path("content").asText();
-
             String[] lines = editorContent.split("\n");
-
             for (String line : lines) {
                 interpretLine(line.trim());
             }
-
             saveResultsToJson();
         } catch (IOException e) {
             System.err.println("Impossible d'interpréter l'éditeur");
