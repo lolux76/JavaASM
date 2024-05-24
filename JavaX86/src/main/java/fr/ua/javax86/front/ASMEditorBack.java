@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import fr.ua.javax86.asm.ASM;
+import fr.ua.javax86.exceptions.EmptyStackException;
+import fr.ua.javax86.exceptions.FullStackException;
 import fr.ua.javax86.model.Flags;
 import fr.ua.javax86.model.Register;
 
@@ -31,7 +33,7 @@ public class ASMEditorBack {
         }
     }
 
-    private void interpretLine(String line) {
+    private void interpretLine(String line)  {
         if (line.isEmpty() || line.startsWith(";")) {
             return;
         }
@@ -147,6 +149,34 @@ public class ASMEditorBack {
                     usedRegisters.add(reg);
                 } else {
                     System.err.println("Invalid not instruction: " + line);
+                }
+                break;
+            case "pop":
+                if(args.length == 1){
+                    String reg = args[0].trim();
+                    try {
+                        asm.pop(); // a changer (y'a pas de registre ???)
+                    } catch (EmptyStackException e) {
+                        throw new RuntimeException(e);
+                    }
+                    usedRegisters.add(reg);
+                }
+                else {
+                    System.err.println("Invalid pop instruction: " + line);
+                }
+                break;
+            case "push":
+                if(args.length == 1){
+                    String reg = args[0].trim();
+                    try {
+                        asm.push(reg);
+                    } catch (FullStackException e) {
+                        throw new RuntimeException(e);
+                    }
+                    usedRegisters.add(reg);
+                }
+                else {
+                    System.err.println("Invalid push instruction: " + line);
                 }
                 break;
             default:
