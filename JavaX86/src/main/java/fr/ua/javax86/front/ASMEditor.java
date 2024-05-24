@@ -23,9 +23,8 @@ import java.util.Map;
 public class ASMEditor extends JFrame {
     private final JTextPane textPane;
     private final DefaultTableModel tableModel;
-    JTextField textFlags = new JTextField();
+    private final JTextField textFlags = new JTextField();
     private final Map<String, Color> colorMap = new HashMap<>();
-    private List<String> registers;
 
     public ASMEditor() {
         super("ASM Editor");
@@ -44,7 +43,6 @@ public class ASMEditor extends JFrame {
         JButton runButton = new JButton("Run");
         runButton.addActionListener(e -> updateTableWithRegisters());
 
-
         JPanel editorPanel = new JPanel(new BorderLayout());
         editorPanel.add(textScrollPane, BorderLayout.CENTER);
         editorPanel.add(runButton, BorderLayout.SOUTH);
@@ -61,7 +59,6 @@ public class ASMEditor extends JFrame {
             }
         };
         JTable table = new JTable(tableModel);
-
 
         textFlags.setEditable(false);
         tablePanel.add(textFlags, BorderLayout.SOUTH);
@@ -101,7 +98,6 @@ public class ASMEditor extends JFrame {
             );
 
             Map<String, List<String>> colors = (Map<String, List<String>>) config.get("colors");
-            registers = colors.get("registers");
             for (Map.Entry<String, List<String>> entry : colors.entrySet()) {
                 Color color = getColorByName(entry.getKey());
                 if (color != null) {
@@ -164,7 +160,6 @@ public class ASMEditor extends JFrame {
                 Element line = root.getElement(i);
                 int start = line.getStartOffset();
                 int end = line.getEndOffset() - 1;
-
                 doc.setCharacterAttributes(start, end - start, createGrayAttributeSet(), false);
             }
         }
@@ -172,7 +167,6 @@ public class ASMEditor extends JFrame {
 
 
     private void updateTableWithRegisters() {
-
         String text = textPane.getText();
         Map<String, String> editorContent = new HashMap<>();
         editorContent.put("content", text);
@@ -195,7 +189,6 @@ public class ASMEditor extends JFrame {
             JsonNode rootNode = objectMapper.readTree(new File("./resultats.json"));
             tableModel.setRowCount(0);
 
-
             Iterator<Map.Entry<String, JsonNode>> fields = rootNode.fields();
             while (fields.hasNext()) {
                 Map.Entry<String, JsonNode> field = fields.next();
@@ -208,10 +201,8 @@ public class ASMEditor extends JFrame {
                     String signedDecimalValue = registerData.get("signedDecimal").asText();
                     tableModel.addRow(new Object[]{registerName, binaryValue, hexValue, signedDecimalValue});
                 } else if (registerData.isTextual() && registerName.equals("flags")) {
-
                     JsonNode flagsNode = rootNode.get("flags");
                     String flagsText = flagsNode != null ? flagsNode.asText() : "No flags";
-
                     textFlags.setText("Flags: "+flagsText);
                 }
             }
