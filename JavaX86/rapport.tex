@@ -97,4 +97,30 @@ shl produit un décalage à gauche d'un registre selon la valeur souhaitée.
 \\
 \includegraphics[width=0.5\textwidth]{img/shl.png}
 
+\subsection{shr}
+shr produit un décalge à droite d'un registre selon la valeur souhaitée.
+\\
+\\
+\includegraphics[width=0.5\textwidth]{img/shr.png}
+
+\subsection{div}
+La division s'effectue en suivant un algorithme binaire proche de la technique de la division Egyptienne. Le principe est de construire à l'envers un tableau de multiplications
+égytien en construisant un tableau de puissances de 2 et de leur produit par le diviseur. Afin d'optimiser de la mémoire et du temps de calcul, la méthode binaire utilise une approche
+dichotomique de cette algorithme. La méthode originale "dite naïve" nécessite de construire la suite du tableau en additionnant les résulats précédents afin de trouver le quotien le plus
+proche possible. La méthode dichotomique a une approche légèrement différente. On recherche d'abord la première puissance de 2 qui, multiplié par le quotient, sera supérieure au dividende.
+On considère donc la suite géométrique $2^{n}$. Tant que $2^{n} * diviseur <= dividende$ on incrément $n$ de 1. On arrête le calcul lorsque l'on trouve N, le plus petit entier tel que :
+$2^{N} * diviseur > dividende$. Le nombre d'étapes pour arriver à ce résultat de l'ordre de $log_{2}(\frac{dividende}{diviseur})$. De plus, chacune de ces étapes ne nécessite qu'une multiplication
+ainsi qu'un décalage à gauche et une comparaison.
+Pour la deuxième partie de l'algorithme, on construit deux suites de minorants ($\alpha_{n}$) et de majorants ($\beta_{n}$) du quotient.
+On a donc: $\alpha_{0} = 2^{N-1}$ et $\beta_{0} = 2^{N}$.
+Puis, on calcule par récurrence :
+$\alpha_{n+1} = \frac{\alpha_{n} + \beta_{n}}{2}$ et $\beta_{n+1} = \beta_{n}$ si $\frac{\alpha_{n} + \beta_{n}}{2} * diviseur < dividende$
+$\beta_{n+1} = \frac{\alpha_{n} + \beta_{n}}{2}$ et $\alpha_{n+1} = \alpha_{n}$ dans le cas contraire.
+En cas d'égalité, le quotient est donc $\frac{\alpha_{n} + \beta_{n}}{2}$ et on peut sortir de la boucle de calcul. S'il n'y a jamais égalité, on trouve le quotient au bout de maximum N - 1 itérations.
+Une autre propriété de ce calcul est que les deux suites sont toujours séparées de $2^{N - 1 - n}$ ce qui permet de montrer que les suites sont toujours définies dans l'intervalle et que dans le cas
+d'itérations maximales, $\alpha_{N - 1}$ est le plus grand minorant du quotient, c'est à dire, le quotient.
+Le nombre maximum d'étapes pour ce calcul est de $\log_2{\frac{dividende}{diviseur}}$ qui chacune ne nécessite qu'additions, multiplication, décalages et comparaisons.
+En concaténant les 2 étapes l'algorithme est très efficace avec une complexité qui grandit en fonction de $\frac{dividende}{diviseur}$ et donc de manière linéaire avec le $dividende$. Cette méthode est donc très efficace.
+Enfin, le reste se calcul en effectuant une simple soustraction : $reste = dividende - quotient * diviseur$
+
 \end{document}
