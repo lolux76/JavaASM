@@ -161,11 +161,13 @@ public class ASMEditor extends JFrame {
         // Coloration des commentaires avec point virgule (en gris)
         String[] lines = text.split("\n");
         for (int i = 0; i < lines.length; i++) {
-            if (lines[i].startsWith(";")) {
+            String line = lines[i];
+            int commentIndex = line.indexOf(";");
+            if (commentIndex != -1) {
                 Element root = doc.getDefaultRootElement();
-                Element line = root.getElement(i);
-                int start = line.getStartOffset();
-                int end = line.getEndOffset() - 1;
+                Element lineElement = root.getElement(i);
+                int start = lineElement.getStartOffset() + commentIndex;
+                int end = lineElement.getEndOffset() - 1;
                 doc.setCharacterAttributes(start, end - start, createGrayAttributeSet(), false);
             }
         }
