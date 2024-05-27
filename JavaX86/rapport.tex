@@ -1,0 +1,55 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+
+\title{Projet x86 Assembleur}
+\author{BADOUAL CHAUSSÉ GRIMAUD GUILLOT}
+\date{Mai 2024}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+Le langage assembleur est le langage informatique le plus proche de la machine.
+
+Il utilise pour cela des bits qui représente des valeurs binaires. Ce langage permet d'effectuer la plupart des calculs arithmétique et logiques. Ces instructions sont représenté par des symboles bien plus lisible par l'humain.
+
+Exemple : \emph{mov eax,15}.
+
+Dans cette expression on peut voir, une instruction, un registre et une valeur. Un registre est un emplacement de mémoire qui dans notre cas vas stocké un ensemble de bits qui pour cette expression correspondras à la valeur binaire de 15 (00000 1111).
+
+Ces registres peuvent intéragir entre eux, exemples, les expression aarithmétique ou logiques entre deux registres.
+
+\section{Organisation de notre programme}
+\subsection{ASM}
+Nous avons créé une classe ASM qui vas reprendre l'ensemble des registres x86 initialise. Ceci nous permet donc de directement les manipuler sans devoir les créer. Ce sera cette classe qui sera utilisé dans la partie interpretation graphique pour ne pas avoir à rajouter la gestion de la création.
+
+gngngn, on a utilisé 16 bitsets de 64 bits pour différencier les différents registres
+Ensuite on a initialisé des les registres sur leurs parties nécessaires
+
+\subsection{Register}
+La classe registre est la classe principale du programme. En effet c'est dans cette classe que l'on vas définir l'ensemble des variables pour la création et la gestion des Registre.
+
+Il possède un nom.
+Un bitset (une array de boolean sur lequel certaines fonctions sont déjà définies).
+Un entier de début et de fin.
+Une partie haute et une partie basse
+
+Il y a plusieurs constructeurs possible avec initialisation de valeur ou non.
+
+Parmis les fonction arithmétiques, il y a :
+\begin{itemize}
+    \item move : Enregistrement dans un registre d'une valeur
+    \item add : Addition de 2 registres, la valeurs est stcoké dans le premier regsitres
+    \item sub : Soustraction de 2 registres, la valeurs est stcoké dans le premier regsitres
+    \item mul : Multiplication entre le registre eax et un registre passé en paramètre
+    \item div :
+\end{itemize}
+
+
+\subsection{ASMEditor}
+gngngn on utilise Java Swing (sur le dance floor) pour faire un éditeur de texte avec une coloration des différents trucs qu'on peut utiliser
+À cet éditeur est associé un tableau de données correspondant aux données utilisées (si on utilise un registre eax, on aura sa représentation sous forme binaire, hexa, décimale ...)
+
+
+\end{document}
