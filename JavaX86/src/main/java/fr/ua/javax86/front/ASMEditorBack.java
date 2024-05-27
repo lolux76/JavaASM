@@ -37,15 +37,20 @@ public class ASMEditorBack {
         if (line.isEmpty() || line.startsWith(";")) {
             return;
         }
+        String[] parts = line.split(";");
+        String instructionPart = parts[0].trim(); // Partie d'instruction avant le commentaire
 
-        String[] tokens = line.split("\\s+");
+        if (instructionPart.isEmpty()) {
+            return;
+        }
+
+        String[] tokens = instructionPart.split("\\s+");
         if (tokens.length < 2) {
             System.err.println("Invalid instruction: " + line);
             return;
         }
-
         String instruction = tokens[0];
-        String[] args = line.substring(instruction.length()).split(",");
+        String[] args = instructionPart.substring(instruction.length()).split(",");
 
         switch (instruction.toLowerCase()) {
             case "mov":
