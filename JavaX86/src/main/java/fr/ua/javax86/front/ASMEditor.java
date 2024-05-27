@@ -36,6 +36,7 @@ public class ASMEditor extends JFrame {
         textPane = new JTextPane();
         textPane.setBackground(Color.BLACK);
         textPane.setForeground(Color.WHITE);
+        textPane.setCaretColor(Color.WHITE);
         textPane.setFont(new Font("Monospaced", Font.PLAIN, 16));
 
         JScrollPane textScrollPane = new JScrollPane(textPane);
