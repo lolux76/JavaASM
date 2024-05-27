@@ -166,17 +166,24 @@ public class ASMEditorBack {
                 }
                 break;
             case "push":
-                if(args.length == 1){
-                    String reg = args[0].trim();
+                if (args.length == 1) {
+                    String arg = args[0].trim();
                     try {
-                        asm.push(reg);
+                        if (arg.startsWith("word")) {
+                            String valueStr = arg.substring(4).trim();
+                            long value = Long.parseLong(valueStr); // Assuming value is a number
+                            asm.push(value, 16); // 16-bit word
+                        } else if (arg.startsWith("dword")) {
+                            String valueStr = arg.substring(5).trim();
+                            long value = Long.parseLong(valueStr); // Assuming value is a number
+                            asm.push(value, 32); // 32-bit double word
+                        } else {
+                            asm.push(arg);
+                            usedRegisters.add(arg);
+                        }
                     } catch (FullStackException e) {
                         throw new RuntimeException(e);
                     }
-                    usedRegisters.add(reg);
-                }
-                else {
-                    System.err.println("Invalid push instruction: " + line);
                 }
                 break;
             default:

@@ -115,6 +115,7 @@ public class ASMEditor extends JFrame {
         return switch (name) {
             case "registers" -> Color.CYAN;
             case "operation" -> Color.ORANGE;
+            case "word" -> Color.RED;
             default -> null;
         };
     }
