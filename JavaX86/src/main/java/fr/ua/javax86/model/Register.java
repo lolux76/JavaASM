@@ -211,6 +211,59 @@ public class Register {
             throw new ArithmeticException("Division by zero");
         }
 
+        // Recherche de la première puissance de 2 supérieure
+        Register compteur = new Register("compteur", new BitSet(128), 0, 128);
+
+        while(compteur.toUnsigned() * divisor.toUnsigned() < dividend.toUnsigned()){
+            if(compteur.toUnsigned() == 0){
+                compteur.getArrayOfBit().set(0, true);
+            }
+            else
+            {
+                compteur.shl(1);
+            }
+        }
+
+        // Recherche des minorants et majorants
+        Register minorant = new Register("minorant", new BitSet(128), 0, 128);
+        Register majorant = new Register("majorant", new BitSet(128), 0, 128);
+
+        minorant.mov(Integer.parseInt(String.valueOf(compteur.toUnsigned())));
+        minorant.shr(1);
+
+        majorant.mov(Integer.parseInt(String.valueOf(compteur.toUnsigned())));
+
+        Register tmp = new Register("tmp", new BitSet(128), 0, 128);
+
+        int compteurSuite = 0;
+
+
+        while (compteurSuite < compteur.arrayOfBit.length()){
+            tmp.mov(Integer.parseInt(String.valueOf(minorant.toUnsigned())));
+            add(tmp, majorant);
+            tmp.shr(1);
+            if(tmp.toUnsigned() * divisor.toUnsigned() == dividend.toUnsigned()){
+                break;
+            }
+            else if(tmp.toUnsigned() * divisor.toUnsigned() < dividend.toUnsigned()) {
+                minorant.mov(Integer.parseInt(String.valueOf(tmp.toUnsigned())));
+            }
+            else{
+                majorant.mov(Integer.parseInt(String.valueOf(tmp.toUnsigned())));
+            }
+
+            compteurSuite++;
+        }
+        // On a trouve le quotient
+        quotient.mov(Integer.parseInt(String.valueOf(tmp.toUnsigned())));
+
+        // Calcul du reste
+        remainder.getArrayOfBit().clear();
+        remainder.mov(Integer.parseInt(String.valueOf(dividend.toUnsigned())));
+        tmp.mov(Integer.parseInt(String.valueOf(quotient.toUnsigned() * divisor.toUnsigned())));
+        remainder.mov(Integer.parseInt(String.valueOf(remainder.toUnsigned() - tmp.toUnsigned())));
+
+        /*
         // Initialise le reste avec le dividende
         remainder.setArrayOfBit(dividend.getArrayOfBit());
 
@@ -238,7 +291,7 @@ public class Register {
                 sub(remainder, divisor);
             }
         }
-
+        */
         //Zero Flag
         Flags.getFlags().setZeroFlag(true);
         for(int i = quotient.debut; i < quotient.fin; i++){
@@ -259,13 +312,13 @@ public class Register {
         Flags.getFlags().setSignFlag(quotient.getArrayOfBit().get(quotient.fin - 1));
 
         //Parity Flag
-        int compteur = 0;
+        int compteurParity = 0;
         for(int i = quotient.debut; i < quotient.fin; i++){
             if(quotient.getArrayOfBit().get(i)){
-                compteur++;
+                compteurParity++;
             }
         }
-        Flags.getFlags().setParityFlag(compteur % 2 == 0);
+        Flags.getFlags().setParityFlag(compteurParity % 2 == 0);
 
         //Carry Flag
         Flags.getFlags().setCarryFlag(!quotient.isHomogeneous());

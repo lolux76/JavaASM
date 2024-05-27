@@ -369,13 +369,22 @@ public class ASM {
         Register Registre1 = this.parsing(r1);
         switch (Registre1.getSize()){
             case 8 :
-                //Register.div(this.ax, this.al, Registre1);
+                Register.div(this.al, this.al, Registre1, this.ah);
                 break;
             case 16 :
-                //Register.div(this.dx, this.ax, Registre1);
+                Register.div(this.ax, this.eax, Registre1, this.dh);
                 break;
-            default:
-                Register.div(this.eax, this.edx, Registre1, this.edx);
+            case 32 :
+                Register edxEax = new Register("edx:eax", new BitSet(64), 0, 64);
+                for(int i = 0 ; i < 64; i++){
+                    if(i < 32){
+                        edxEax.getArrayOfBit().set(i, this.eax.getArrayOfBit().get(i));
+                    }
+                    else{
+                        edxEax.getArrayOfBit().set(i, this.edx.getArrayOfBit().get(i));
+                    }
+                }
+                Register.div(this.eax, edxEax, Registre1, this.edx);
                 break;
         }
     }
@@ -409,6 +418,10 @@ public class ASM {
     public void push(String r1) throws FullStackException {
         Register Registre1 = this.parsing(r1);
         this.asmPile.push(Registre1.getArrayOfBit());
+    }
+
+    public void push(long valeur, int taille) throws FullStackException {
+        this.asmPile.push(valeur, taille);//Taille sera 16 pour 'word' et 32 pour 'dword'
     }
     //
     public Long toSigned(String r1){

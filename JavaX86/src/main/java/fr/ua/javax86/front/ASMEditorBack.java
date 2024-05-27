@@ -37,15 +37,20 @@ public class ASMEditorBack {
         if (line.isEmpty() || line.startsWith(";")) {
             return;
         }
+        String[] parts = line.split(";");
+        String instructionPart = parts[0].trim(); // Partie d'instruction avant le commentaire
 
-        String[] tokens = line.split("\\s+");
+        if (instructionPart.isEmpty()) {
+            return;
+        }
+
+        String[] tokens = instructionPart.split("\\s+");
         if (tokens.length < 2) {
             System.err.println("Invalid instruction: " + line);
             return;
         }
-
         String instruction = tokens[0];
-        String[] args = line.substring(instruction.length()).split(",");
+        String[] args = instructionPart.substring(instruction.length()).split(",");
 
         switch (instruction.toLowerCase()) {
             case "mov":
@@ -166,17 +171,24 @@ public class ASMEditorBack {
                 }
                 break;
             case "push":
-                if(args.length == 1){
-                    String reg = args[0].trim();
+                if (args.length == 1) {
+                    String arg = args[0].trim();
                     try {
-                        asm.push(reg);
+                        if (arg.startsWith("word")) {
+                            String valueStr = arg.substring(4).trim();
+                            long value = Long.parseLong(valueStr); // Assuming value is a number
+                            asm.push(value, 16); // 16-bit word
+                        } else if (arg.startsWith("dword")) {
+                            String valueStr = arg.substring(5).trim();
+                            long value = Long.parseLong(valueStr); // Assuming value is a number
+                            asm.push(value, 32); // 32-bit double word
+                        } else {
+                            asm.push(arg);
+                            usedRegisters.add(arg);
+                        }
                     } catch (FullStackException e) {
                         throw new RuntimeException(e);
                     }
-                    usedRegisters.add(reg);
-                }
-                else {
-                    System.err.println("Invalid push instruction: " + line);
                 }
                 break;
             default:

@@ -55,9 +55,14 @@ public class Main {
         System.out.println(asm.toString("eax"));
         System.out.println(asm.toString("edx"));
 
-        asm.div("dh");
+        asm.mov("eax", 60);
+        asm.mov("ecx", 4);
+        asm.xor("ax", "ax");
+        asm.xor("dx", "dx");
 
-        System.out.println("60 : 4 : " + asm.toUnsigned("eax"));
-        System.out.println("reste : " + asm.toUnsigned("edx"));
+        asm.div("ecx");
+
+        System.out.println("60 / 4 : " + asm.toUnsigned("ax"));
+        System.out.println("reste : " + asm.toUnsigned("dx"));
     }
 }

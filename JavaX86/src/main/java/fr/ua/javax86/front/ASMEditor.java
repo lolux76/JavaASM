@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.text.*;
@@ -36,6 +37,7 @@ public class ASMEditor extends JFrame {
         textPane = new JTextPane();
         textPane.setBackground(Color.BLACK);
         textPane.setForeground(Color.WHITE);
+        textPane.setCaretColor(Color.WHITE);
         textPane.setFont(new Font("Monospaced", Font.PLAIN, 16));
 
         JScrollPane textScrollPane = new JScrollPane(textPane);
@@ -66,6 +68,9 @@ public class ASMEditor extends JFrame {
         TableColumn column;
         for (int i = 0; i < table.getColumnCount(); i++) {
             column = table.getColumnModel().getColumn(i);
+            DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+            rightRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
+            column.setCellRenderer(rightRenderer);
             if (i == 1) {
                 column.setPreferredWidth(600);
             } else {
@@ -115,6 +120,7 @@ public class ASMEditor extends JFrame {
         return switch (name) {
             case "registers" -> Color.CYAN;
             case "operation" -> Color.ORANGE;
+            case "word" -> Color.RED;
             default -> null;
         };
     }
@@ -155,11 +161,13 @@ public class ASMEditor extends JFrame {
         // Coloration des commentaires avec point virgule (en gris)
         String[] lines = text.split("\n");
         for (int i = 0; i < lines.length; i++) {
-            if (lines[i].startsWith(";")) {
+            String line = lines[i];
+            int commentIndex = line.indexOf(";");
+            if (commentIndex != -1) {
                 Element root = doc.getDefaultRootElement();
-                Element line = root.getElement(i);
-                int start = line.getStartOffset();
-                int end = line.getEndOffset() - 1;
+                Element lineElement = root.getElement(i);
+                int start = lineElement.getStartOffset() + commentIndex;
+                int end = lineElement.getEndOffset() - 1;
                 doc.setCharacterAttributes(start, end - start, createGrayAttributeSet(), false);
             }
         }
