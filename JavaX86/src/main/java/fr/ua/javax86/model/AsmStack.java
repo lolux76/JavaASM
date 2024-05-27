@@ -32,6 +32,16 @@ public class AsmStack {
             throw new FullStackException();
         }
     }
+    public void push(long valeur, int taille) throws FullStackException {
+        if(this.actualSize + taille <= this.size) { //Taille sera 16 pour 'word' et 32 pour 'dword'
+            BitSet bs = BitSet.valueOf(new long[] {valeur});
+            stack.push(bs);
+            actualSize += taille;
+        }
+        else{
+            throw new FullStackException();
+        }
+    }
 
     public BitSet pop() throws EmptyStackException {
         if(stack.isEmpty()){

@@ -410,6 +410,10 @@ public class ASM {
         Register Registre1 = this.parsing(r1);
         this.asmPile.push(Registre1.getArrayOfBit());
     }
+
+    public void push(long valeur, int taille) throws FullStackException {
+        this.asmPile.push(valeur, taille);//Taille sera 16 pour 'word' et 32 pour 'dword'
+    }
     //
     public Long toSigned(String r1){
         Register Registre1 = this.parsing(r1);
