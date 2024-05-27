@@ -24,32 +24,65 @@ Ces registres peuvent intéragir entre eux, exemples, les expression aarithméti
 \subsection{ASM}
 Nous avons créé une classe ASM qui vas reprendre l'ensemble des registres x86 initialise. Ceci nous permet donc de directement les manipuler sans devoir les créer. Ce sera cette classe qui sera utilisé dans la partie interpretation graphique pour ne pas avoir à rajouter la gestion de la création.
 
-gngngn, on a utilisé 16 bitsets de 64 bits pour différencier les différents registres
-Ensuite on a initialisé des les registres sur leurs parties nécessaires
 
 \subsection{Register}
-La classe registre est la classe principale du programme. En effet c'est dans cette classe que l'on vas définir l'ensemble des variables pour la création et la gestion des Registre.
+La classe Register est la classe principale du programme. En effet c'est dans cette classe que l'on vas définir l'ensemble des variables pour la création et la gestion des Registre.
 
 Il possède un nom.
 Un bitset (une array de boolean sur lequel certaines fonctions sont déjà définies).
 Un entier de début et de fin.
-Une partie haute et une partie basse
+Une partie haute et une partie basse.
 
 Il y a plusieurs constructeurs possible avec initialisation de valeur ou non.
 
-Parmis les fonction arithmétiques, il y a :
+\subsubsection{Addition}
+Pour implémenter le calcul de l'addition je me suis basé sur l'algorithme standard de calcul de l'addition binaire sur le BitSet de Registres.
+
+\begin{verbatim}
+1| boolean retenue=false;
+2| boolean signed = r1.getArrayOfBit().get(r1.fin - 1) && r2.getArrayOfBit().get(r2.fin - 1);
+3|
+4| for(int i=0;i<r1.arrayOfBit.size();i++){
+5|    boolean a1 = r1.arrayOfBit.get(i);
+6|    r1.arrayOfBit.set(i,r1.arrayOfBit.get(i) ^ r2.arrayOfBit.get(i) ^ retenue); //addition de chaque bit 1 à 1
+7|    retenue = (a1 & retenue) | (r2.arrayOfBit.get(i) & retenue) | (a1 & r2.arrayOfBit.get(i)); //Retenue si au moins 2 bit à 1
+8| }
+\end{verbatim}
+
+1 - Initialisation de la variable chargée de stocké la retenue
+
+4 - Boucle qui vas itérer sur l'entiereté de l'ArrayOfBit du registres 1
+
+5 - Récupération du bit avec comme index i (utile car modifié par la suite)
+
+6 - Cette ligne calcul la valeur du bit i à l'aide de 2 xor effectué sur la retnue, r1 et r2. Cette ligne représente l'addition bninaire de ces 2 bits.
+
+7 - Pour finir, cette ligne calcul la valeur de la retenue pour le prochain bit. La retenue est vrai si au moins 2 des 3 valeurs (la retenue actuelle et les 2 registres) sont vrais.
+
+Le resultat sera stocké par la suite dans le premier registre passé en paramètre, exemple :
+\begin{verbatim}
+mov eax,20
+mov ebx,15
+add eax,ebx
+
+eax = 35 ; ebx = 15
+\end{verbatim}
+
+Il exite aussi des fonctions sur les piles :
 \begin{itemize}
-    \item move : Enregistrement dans un registre d'une valeur
-    \item add : Addition de 2 registres, la valeurs est stcoké dans le premier regsitres
-    \item sub : Soustraction de 2 registres, la valeurs est stcoké dans le premier regsitres
-    \item mul : Multiplication entre le registre eax et un registre passé en paramètre
-    \item div :
+    \item push : Rajoute le bitset lié à la valeur ou au registre passé en paramètre
+    \item pop : Récupère le dernier bitset enregistré dans la pile
 \end{itemize}
-
-
+Et pour finir les expression logiques sont aussi disponibles sur ces registres :
+\begin{itemize}
+    \item And :
+    \item Or :
+    \item Not :
+\end{itemize}
 \subsection{ASMEditor}
-gngngn on utilise Java Swing (sur le dance floor) pour faire un éditeur de texte avec une coloration des différents trucs qu'on peut utiliser
-À cet éditeur est associé un tableau de données correspondant aux données utilisées (si on utilise un registre eax, on aura sa représentation sous forme binaire, hexa, décimale ...)
+En utilisant la librairie Java swing, nous avons implémenté un éditeur de text qui nous permet d'afficher en même temps
+les registres utilisé lors de l'éxécutions d'un script. Cet éditeur utilise notre classe ASM et possède une coloration automatique
+des registres, des valeurs et des instrcutions disponible pour une création de script simplifiée.
 
 \section{Operations arithmetiques}
 \subsection{mov}
