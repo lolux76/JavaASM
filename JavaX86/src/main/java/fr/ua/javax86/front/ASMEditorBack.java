@@ -155,7 +155,7 @@ public class ASMEditorBack {
                 if(args.length == 1){
                     String reg = args[0].trim();
                     try {
-                        asm.pop(); // a changer (y'a pas de registre ???)
+                        asm.pop(reg);
                     } catch (EmptyStackException e) {
                         throw new RuntimeException(e);
                     }

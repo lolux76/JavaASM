@@ -400,8 +400,10 @@ public class ASM {
         Register.not(Registre1);
     }
 
-    public BitSet pop() throws EmptyStackException {
-        return this.asmPile.pop();
+    public void pop(String r1) throws EmptyStackException {
+        BitSet bs = this.asmPile.pop();
+        Register Registre1 = this.parsing(r1);
+        Registre1.setArrayOfBit(bs);
     }
 
     public void push(String r1) throws FullStackException {
