@@ -9,22 +9,22 @@ import java.util.BitSet;
 
 public class ASM {
     //Bitsets
-    BitSet bs0;
-    BitSet bs1;
-    BitSet bs2;
-    BitSet bs3;
-    BitSet bs4;
-    BitSet bs5;
-    BitSet bs6;
-    BitSet bs7;
-    BitSet bs8;
-    BitSet bs9;
-    BitSet bs10;
-    BitSet bs11;
-    BitSet bs12;
-    BitSet bs13;
-    BitSet bs14;
-    BitSet bs15;
+    static BitSet bs0;
+    static BitSet bs1;
+    static BitSet bs2;
+    static BitSet bs3;
+    static BitSet bs4;
+    static BitSet bs5;
+    static BitSet bs6;
+    static BitSet bs7;
+    static BitSet bs8;
+    static BitSet bs9;
+    static BitSet bs10;
+    static BitSet bs11;
+    static BitSet bs12;
+    static BitSet bs13;
+    static BitSet bs14;
+    static BitSet bs15;
 
     //Registres de 128 bits
     Register xmm0;
@@ -230,6 +230,102 @@ public class ASM {
         ch = new Register("CH", bs2, 8, 16);
         dh = new Register("DH", bs3, 8, 16);
         asmPile = new AsmStack();
+    }
+
+    public void updateASM(){
+        //128 bits
+        xmm0 = new Register("XMM0", bs0, 0, 128);
+        xmm1 = new Register("XMM1", bs1, 0, 128);
+        xmm2 = new Register("XMM2", bs2, 0, 128);
+        xmm3 = new Register("XMM3", bs3, 0, 128);
+        xmm4 = new Register("XMM4", bs4, 0, 128);
+        xmm5 = new Register("XMM5", bs5, 0, 128);
+        xmm6 = new Register("XMM6", bs6, 0, 128);
+        xmm7 = new Register("XMM7", bs7, 0, 128);
+        xmm8 = new Register("XMM8", bs8, 0, 128);
+        xmm9 = new Register("XMM9", bs9, 0, 128);
+        xmm10 = new Register("XMM10", bs10, 0, 128);
+        xmm11 = new Register("XMM11", bs11, 0, 128);
+        xmm12 = new Register("XMM12", bs12, 0, 128);
+        xmm13 = new Register("XMM13", bs13, 0, 128);
+        xmm14 = new Register("XMM14", bs14, 0, 128);
+        xmm15 = new Register("XMM15", bs15, 0, 128);
+
+        //64 bits
+        rax = new Register("RAX", bs0, 0, 64);
+        rbx = new Register("RBX", bs1, 0, 64);
+        rcx = new Register("RCX", bs2, 0, 64);
+        rdx = new Register("RDX", bs3, 0, 64);
+        rsi = new Register("RSI", bs4, 0, 64);
+        rdi = new Register("RDI", bs5, 0, 64);
+        rbp = new Register("RBP", bs6, 0, 64);
+        rsp = new Register("RSP", bs7, 0, 64);
+        r8 = new Register("R8", bs8, 0, 64);
+        r9 = new Register("R9", bs9, 0, 64);
+        r10 = new Register("R10", bs10, 0, 64);
+        r11 = new Register("R11", bs11, 0, 64);
+        r12 = new Register("R12", bs12, 0, 64);
+        r13 = new Register("R13", bs13, 0, 64);
+        r14 = new Register("R14", bs14, 0, 64);
+        r15 = new Register("R15", bs15, 0, 64);
+
+        //32 bits
+        eax = new Register("EAX", bs0, 0, 32);
+        ebx = new Register("EBX", bs1, 0, 32);
+        ecx = new Register("ECX", bs2, 0, 32);
+        edx = new Register("EDX", bs3, 0, 32);
+        esi = new Register("ESI", bs4, 0, 32);
+        edi = new Register("EDI", bs5, 0, 32);
+        ebp = new Register("EBP", bs6, 0, 32);
+        esp = new Register("ESP", bs7, 0, 32);
+        r8d = new Register("R8D", bs8, 0, 32);
+        r9d = new Register("R9D", bs9, 0, 32);
+        r10d = new Register("R10D", bs10, 0, 32);
+        r11d = new Register("R11D", bs11, 0, 32);
+        r12d = new Register("R12D", bs12, 0, 32);
+        r13d = new Register("R13D", bs13, 0, 32);
+        r14d = new Register("R14D", bs14, 0, 32);
+        r15d = new Register("R15D", bs15, 0, 32);
+        //16 bits
+        ax = new Register("AX", bs0, 0, 16);
+        bx = new Register("BX", bs1, 0, 16);
+        cx = new Register("CX", bs2, 0, 16);
+        dx = new Register("DX", bs3, 0, 16);
+        si = new Register("SI", bs4, 0, 16);
+        di = new Register("DI", bs5, 0, 16);
+        bp = new Register("BP", bs6, 0, 16);
+        sp = new Register("SP", bs7, 0, 16);
+        r8w = new Register("R8W", bs8, 0, 16);
+        r9w = new Register("R9W", bs9, 0, 16);
+        r10w = new Register("R10W", bs10, 0, 16);
+        r11w = new Register("R11W", bs11, 0, 16);
+        r12w = new Register("R12W", bs12, 0, 16);
+        r13w = new Register("R13W", bs13, 0, 16);
+        r14w = new Register("R14W", bs14, 0, 16);
+        r15w = new Register("R15W", bs15, 0, 16);
+        //8 bits low
+        al = new Register("AL", bs0, 0, 8);
+        bl = new Register("BL", bs1, 0, 8);
+        cl = new Register("CL", bs2, 0, 8);
+        dl = new Register("DL", bs3, 0, 8);
+        sil = new Register("SIL", bs4, 0, 8);
+        dil = new Register("DIL", bs5, 0, 8);
+        bpl = new Register("BPL", bs6, 0, 8);
+        spl = new Register("SPL", bs7, 0, 8);
+        r8b = new Register("R8B", bs8, 0, 8);
+        r9b = new Register("R9B", bs9, 0, 8);
+        r10b = new Register("R10B", bs10, 0, 8);
+        r11b = new Register("R11B", bs11, 0, 8);
+        r12b = new Register("R12B", bs12, 0, 8);
+        r13b = new Register("R13B", bs13, 0, 8);
+        r14b = new Register("R14B", bs14, 0, 8);
+        r15b = new Register("R15B", bs15, 0, 8);
+        //8 bits high
+        ah = new Register("AH", bs0, 8, 16);
+        bh = new Register("BH", bs1, 8, 16);
+        ch = new Register("CH", bs2, 8, 16);
+        dh = new Register("DH", bs3, 8, 16);
+        asmPile = this.asmPile;
     }
 
     public Register parsing(String name){

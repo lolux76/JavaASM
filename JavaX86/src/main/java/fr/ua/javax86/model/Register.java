@@ -6,6 +6,7 @@ public class Register {
 
     String name;
     BitSet arrayOfBit;
+    public BitSet initialBitSet;
     int debut;
     int fin;
     Register partieHaute;
@@ -13,7 +14,8 @@ public class Register {
 
     public Register(String name, BitSet arrayOfBit, int debut, int fin){
         this.name=name;
-        this.arrayOfBit=arrayOfBit.get(debut, fin);
+        this.initialBitSet = arrayOfBit;
+        this.arrayOfBit=initialBitSet.get(debut, fin);
         this.debut=debut;
         this.fin=fin;
         this.partieBasse = new Register(name+"basse",arrayOfBit.get(debut,fin/2),debut, fin/2, true);
@@ -21,35 +23,34 @@ public class Register {
     }
     public Register(String name, BitSet arrayOfBit, int debut, int fin, boolean pourConstructeur) {
         this.name = name;
-        this.arrayOfBit = arrayOfBit.get(debut, fin);
+        this.initialBitSet = arrayOfBit;
+        this.arrayOfBit=this.initialBitSet.get(debut, fin);
         this.debut = debut;
         this.fin = fin;
     }
     public Register(String name, BitSet arrayOfBit, int debut, int fin,int value){
         this.name=name;
-        this.arrayOfBit=arrayOfBit;
+        this.initialBitSet = arrayOfBit;
+        this.arrayOfBit=this.initialBitSet.get(debut, fin);
         this.debut=debut;
         this.fin=fin;
         int i=0;
         this.arrayOfBit = BitSet.valueOf(new long[] {value});
     }
+
+    public void updateInitialBitSet(){
+        this.initialBitSet.set(this.debut, this.fin, false);
+        this.initialBitSet.or(this.arrayOfBit);
+    }
     public Register getPartieBasse(){
+        this.updateInitialBitSet();
         return this.partieBasse;
     }
     public Register getPartieHaute(){
+        this.updateInitialBitSet();
         return this.partieHaute;
     }
 
-    public static void setValue(Register r1,int value){
-        int i=0;
-        while (value != 0) {
-            if (value % 2 == 1) {
-                r1.arrayOfBit.set(i);
-            }
-            value /= 2;
-            i++;
-        }
-    }
 
     public static void add(Register r1,Register r2){
         boolean retenue=false;
@@ -91,6 +92,7 @@ public class Register {
             }
         }
         Flags.getFlags().setParityFlag(compteur % 2 == 0);
+        r1.updateInitialBitSet();
 
     }
 
@@ -143,6 +145,7 @@ public class Register {
             }
         }
         Flags.getFlags().setParityFlag(compteur % 2 == 0);
+        r1.updateInitialBitSet();
     }
 
     public static void mul(Register r1, Register r2, Register operande){
@@ -201,6 +204,8 @@ public class Register {
 
         //Carry Flag
         Flags.getFlags().setCarryFlag(!r1.isHomogeneous());
+        r1.updateInitialBitSet();
+        r2.updateInitialBitSet();
     }
 
     public static void div(Register quotient, Register dividend, Register divisor, Register remainder){
@@ -263,35 +268,6 @@ public class Register {
         tmp.mov(Integer.parseInt(String.valueOf(quotient.toUnsigned() * divisor.toUnsigned())));
         remainder.mov(Integer.parseInt(String.valueOf(remainder.toUnsigned() - tmp.toUnsigned())));
 
-        /*
-        // Initialise le reste avec le dividende
-        remainder.setArrayOfBit(dividend.getArrayOfBit());
-
-        // Initialise le quotient avec zéro
-        quotient.getArrayOfBit().clear();
-
-        // Trouver le bit le plus significatif du diviseur
-        int msbDivisor = findMostSignificantBit(divisor.getArrayOfBit());
-
-        // Parcourir le dividende
-        for (int i = findMostSignificantBit(remainder.getArrayOfBit()); i >= msbDivisor; i--) {
-            // Décalage du reste vers la droite d'un bit
-            remainder.shr(1);
-
-            // Définir le bit de droite du reste au même que le bit correspondant du dividende
-            if (dividend.getArrayOfBit().get(i)) {
-                remainder.getArrayOfBit().set(0);
-            } else {
-                remainder.getArrayOfBit().clear(0);
-            }
-
-            // Si le reste est plus grand ou égal au diviseur, soustraire et mettre le bit de quotient à 1
-            if (cmp(remainder, divisor) >= 0) {
-                quotient.getArrayOfBit().set(i - msbDivisor);
-                sub(remainder, divisor);
-            }
-        }
-        */
         //Zero Flag
         Flags.getFlags().setZeroFlag(true);
         for(int i = quotient.debut; i < quotient.fin; i++){
@@ -322,6 +298,10 @@ public class Register {
 
         //Carry Flag
         Flags.getFlags().setCarryFlag(!quotient.isHomogeneous());
+        dividend.updateInitialBitSet();
+        divisor.updateInitialBitSet();
+        quotient.updateInitialBitSet();
+        remainder.updateInitialBitSet();
     }
 
     public static void and(Register r1,Register r2){
@@ -352,6 +332,7 @@ public class Register {
 
         //Carry Flag
         Flags.getFlags().setCarryFlag(false);
+        r1.updateInitialBitSet();
     }
     public static void or(Register r1,Register r2){
         r1.arrayOfBit.or(r2.arrayOfBit);
@@ -381,6 +362,7 @@ public class Register {
 
         //Carry Flag
         Flags.getFlags().setCarryFlag(false);
+        r1.updateInitialBitSet();
     }
     public static void xor(Register r1,Register r2){
         r1.arrayOfBit.xor(r2.arrayOfBit);
@@ -410,16 +392,18 @@ public class Register {
 
         //Carry Flag
         Flags.getFlags().setCarryFlag(false);
+        r1.updateInitialBitSet();
     }
 
     public BitSet getArrayOfBit() {
-        return arrayOfBit;
+        return this.initialBitSet;
     }
 
     public void setArrayOfBit(BitSet bitSet) {
         for(int i = 0; i < bitSet.size(); i++){
             this.arrayOfBit.set(i, bitSet.get(i));
         }
+        this.updateInitialBitSet();
     }
 
     public void mov(int value){
@@ -445,6 +429,7 @@ public class Register {
 
         //Carry Flag
         Flags.getFlags().setCarryFlag(false);
+        this.updateInitialBitSet();
     }
 
     public void shl(int distance){
@@ -487,6 +472,7 @@ public class Register {
             }
         }
         Flags.getFlags().setParityFlag(compteur % 2 == 0);
+        this.updateInitialBitSet();
     }
 
     public static void shl(BitSet bitset, int distance) {
@@ -571,6 +557,7 @@ public class Register {
             }
         }
         Flags.getFlags().setParityFlag(compteur % 2 == 0);
+        this.updateInitialBitSet();
     }
 
     public static int cmp(Register r1, Register r2) {
@@ -626,6 +613,7 @@ public class Register {
 
         //Carry Flag
         Flags.getFlags().setCarryFlag(Flags.getFlags().getZeroFlag());
+        r1.updateInitialBitSet();
     }
 
     public static int findMostSignificantBit(BitSet bs) {
@@ -714,5 +702,6 @@ public class Register {
     public static void toComp(Register r1){
         Register.not(r1);
         Register.add(r1,new Register("add",new BitSet(r1.arrayOfBit.size()),0,r1.arrayOfBit.size(),1));
+        r1.updateInitialBitSet();
     }
 }
