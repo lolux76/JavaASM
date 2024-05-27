@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.text.*;
@@ -67,6 +68,9 @@ public class ASMEditor extends JFrame {
         TableColumn column;
         for (int i = 0; i < table.getColumnCount(); i++) {
             column = table.getColumnModel().getColumn(i);
+            DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+            rightRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
+            column.setCellRenderer(rightRenderer);
             if (i == 1) {
                 column.setPreferredWidth(600);
             } else {
