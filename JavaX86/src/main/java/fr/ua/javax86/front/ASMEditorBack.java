@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import fr.ua.javax86.asm.ASM;
+import fr.ua.javax86.exceptions.EmptyStackException;
+import fr.ua.javax86.exceptions.FullStackException;
 import fr.ua.javax86.model.Flags;
 import fr.ua.javax86.model.Register;
 
@@ -21,20 +23,17 @@ public class ASMEditorBack {
         try {
             JsonNode rootNode = objectMapper.readTree(new File("./editeur.json"));
             String editorContent = rootNode.path("content").asText();
-
             String[] lines = editorContent.split("\n");
-
             for (String line : lines) {
                 interpretLine(line.trim());
             }
-
             saveResultsToJson();
         } catch (IOException e) {
             System.err.println("Impossible d'interpréter l'éditeur");
         }
     }
 
-    private void interpretLine(String line) {
+    private void interpretLine(String line)  {
         if (line.isEmpty() || line.startsWith(";")) {
             return;
         }
@@ -94,6 +93,8 @@ public class ASMEditorBack {
                     String reg = args[0].trim();
                     asm.mul(reg);
                     usedRegisters.add(reg);
+                    usedRegisters.add("edx");
+
                 } else {
                     System.err.println("Invalid mul instruction: " + line);
                 }
@@ -103,6 +104,7 @@ public class ASMEditorBack {
                     String reg = args[0].trim();
                     asm.div(reg);
                     usedRegisters.add(reg);
+                    usedRegisters.add("edx");
                 } else {
                     System.err.println("Invalid div instruction: " + line);
                 }
@@ -147,6 +149,34 @@ public class ASMEditorBack {
                     usedRegisters.add(reg);
                 } else {
                     System.err.println("Invalid not instruction: " + line);
+                }
+                break;
+            case "pop":
+                if(args.length == 1){
+                    String reg = args[0].trim();
+                    try {
+                        asm.pop(reg);
+                    } catch (EmptyStackException e) {
+                        throw new RuntimeException(e);
+                    }
+                    usedRegisters.add(reg);
+                }
+                else {
+                    System.err.println("Invalid pop instruction: " + line);
+                }
+                break;
+            case "push":
+                if(args.length == 1){
+                    String reg = args[0].trim();
+                    try {
+                        asm.push(reg);
+                    } catch (FullStackException e) {
+                        throw new RuntimeException(e);
+                    }
+                    usedRegisters.add(reg);
+                }
+                else {
+                    System.err.println("Invalid push instruction: " + line);
                 }
                 break;
             default:

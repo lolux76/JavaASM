@@ -23,25 +23,25 @@ import java.util.Map;
 public class ASMEditor extends JFrame {
     private final JTextPane textPane;
     private final DefaultTableModel tableModel;
-    JTextField textFlags = new JTextField();
+    private final JTextField textFlags = new JTextField();
     private final Map<String, Color> colorMap = new HashMap<>();
-    private List<String> registers;
 
     public ASMEditor() {
         super("ASM Editor");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1500, 500);
+        setSize(1200, 500);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
 
         textPane = new JTextPane();
         textPane.setBackground(Color.BLACK);
         textPane.setForeground(Color.WHITE);
+        textPane.setFont(new Font("Monospaced", Font.PLAIN, 16));
+
         JScrollPane textScrollPane = new JScrollPane(textPane);
 
         JButton runButton = new JButton("Run");
         runButton.addActionListener(e -> updateTableWithRegisters());
-
 
         JPanel editorPanel = new JPanel(new BorderLayout());
         editorPanel.add(textScrollPane, BorderLayout.CENTER);
@@ -50,13 +50,17 @@ public class ASMEditor extends JFrame {
         mainPanel.add(editorPanel, BorderLayout.CENTER);
 
         JPanel tablePanel = new JPanel(new BorderLayout());
-        tablePanel.setPreferredSize(new Dimension(1000, 500));
+        tablePanel.setPreferredSize(new Dimension(900, 500));
 
-        tableModel = new DefaultTableModel(new Object[]{"Name", "Binary", "Hexadecimal", "Signed Decimal"}, 0);
+        tableModel =new DefaultTableModel(new Object[]{"Name", "Binary", "Hexadecimal", "Signed Decimal"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         JTable table = new JTable(tableModel);
 
-
-        textFlags.setEditable(false); // Make it non-editable
+        textFlags.setEditable(false);
         tablePanel.add(textFlags, BorderLayout.SOUTH);
 
         TableColumn column;
@@ -94,7 +98,6 @@ public class ASMEditor extends JFrame {
             );
 
             Map<String, List<String>> colors = (Map<String, List<String>>) config.get("colors");
-            registers = colors.get("registers");
             for (Map.Entry<String, List<String>> entry : colors.entrySet()) {
                 Color color = getColorByName(entry.getKey());
                 if (color != null) {
@@ -157,7 +160,6 @@ public class ASMEditor extends JFrame {
                 Element line = root.getElement(i);
                 int start = line.getStartOffset();
                 int end = line.getEndOffset() - 1;
-
                 doc.setCharacterAttributes(start, end - start, createGrayAttributeSet(), false);
             }
         }
@@ -165,7 +167,6 @@ public class ASMEditor extends JFrame {
 
 
     private void updateTableWithRegisters() {
-
         String text = textPane.getText();
         Map<String, String> editorContent = new HashMap<>();
         editorContent.put("content", text);
@@ -188,23 +189,20 @@ public class ASMEditor extends JFrame {
             JsonNode rootNode = objectMapper.readTree(new File("./resultats.json"));
             tableModel.setRowCount(0);
 
-
             Iterator<Map.Entry<String, JsonNode>> fields = rootNode.fields();
             while (fields.hasNext()) {
                 Map.Entry<String, JsonNode> field = fields.next();
                 String registerName = field.getKey();
                 JsonNode registerData = field.getValue();
 
-                if (registerData.isObject()) { // Vérifiez si le nœud est un objet
+                if (registerData.isObject()) {
                     String binaryValue = registerData.get("binary").asText();
                     String hexValue = registerData.get("hexadecimal").asText();
                     String signedDecimalValue = registerData.get("signedDecimal").asText();
                     tableModel.addRow(new Object[]{registerName, binaryValue, hexValue, signedDecimalValue});
                 } else if (registerData.isTextual() && registerName.equals("flags")) {
-
-                    JsonNode flagsNode = rootNode.get("flags"); // Assume that flags are stored in the "flags" field
+                    JsonNode flagsNode = rootNode.get("flags");
                     String flagsText = flagsNode != null ? flagsNode.asText() : "No flags";
-
                     textFlags.setText("Flags: "+flagsText);
                 }
             }

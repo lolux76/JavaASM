@@ -599,17 +599,22 @@ public class Register {
         BitSet aob = this.arrayOfBit;
         long value = 0L;
 
-        for (int i = 0; i < this.fin; ++i) {
-            if (aob.get(i)) {
-                value |= (1L << i); // Met à 1 le bit correspondant dans value
-            }
-        }
 
-        // Si le bit de signe est à 1, alors il s'agit d'un nombre négatif
-        if (aob.get(this.fin-1)) {
-            // Calcul du complément à deux pour obtenir la valeur négative
-            value = -((1L << aob.length()) - value);
-            value += 1;
+        if (aob.get(this.fin -1 )) { //Si le nombre est négatif :
+            for (int i = 0; i < this.fin -1; ++i) {
+                if (!aob.get(i)) {
+                    value |= (1L << i); // Met à 1 le bit qui serait à 0 (étant le complément à 2à correspondant dans value
+                }
+            }
+            value += 1 ;
+            value = - value;
+        }
+        else {
+            for (int i = 0; i < this.fin -1; ++i) {
+                if (aob.get(i)) {
+                    value |= (1L << i); // Met à 1 le bit qui serait à 1 correspondant dans value
+                }
+            }
         }
 
         return value;

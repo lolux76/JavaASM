@@ -37,9 +37,22 @@ public class Main {
         System.out.println("Décalage de dh de 1 bit à gauche : " + asm.toUnsigned("dh"));
         System.out.println(asm.toString("dh"));
 
-        asm.mul("dh");
 
-        System.out.println("4 * 15: " + asm.toUnsigned("edx"));
+
+        asm.mov("ebx", -3);
+        asm.mov("eax", 12);
+        System.out.println("ebx : " + (asm.toString("ebx")));
+        System.out.println("eax : " + (asm.toString("eax")));
+        System.out.println("ebx : " + (asm.toSigned("ebx")));
+        System.out.println("eax : " + (asm.toSigned("eax")));
+        System.out.println("ebx : " + (asm.toString("ebx")));
+        System.out.println("eax : " + (asm.toString("eax")));
+
+
+        asm.mul("ebx");
+
+        System.out.println("-3 * 12: " + asm.toSigned("eax"));
+        System.out.println(asm.toString("eax"));
         System.out.println(asm.toString("edx"));
 
         asm.div("dh");

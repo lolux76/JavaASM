@@ -1,5 +1,8 @@
 package fr.ua.javax86.asm;
 
+import fr.ua.javax86.exceptions.EmptyStackException;
+import fr.ua.javax86.exceptions.FullStackException;
+import fr.ua.javax86.model.AsmStack;
 import fr.ua.javax86.model.Register;
 
 import java.util.BitSet;
@@ -113,6 +116,8 @@ public class ASM {
     Register r13b;
     Register r14b;
     Register r15b;
+
+    AsmStack asmPile;
     public ASM(){
         //bitsets
         bs0 = new BitSet(128);
@@ -224,6 +229,7 @@ public class ASM {
         bh = new Register("BH", bs1, 8, 16);
         ch = new Register("CH", bs2, 8, 16);
         dh = new Register("DH", bs3, 8, 16);
+        asmPile = new AsmStack();
     }
 
     public Register parsing(String name){
@@ -392,6 +398,17 @@ public class ASM {
     public void not(String r1){
         Register Registre1 = this.parsing(r1);
         Register.not(Registre1);
+    }
+
+    public void pop(String r1) throws EmptyStackException {
+        BitSet bs = this.asmPile.pop();
+        Register Registre1 = this.parsing(r1);
+        Registre1.setArrayOfBit(bs);
+    }
+
+    public void push(String r1) throws FullStackException {
+        Register Registre1 = this.parsing(r1);
+        this.asmPile.push(Registre1.getArrayOfBit());
     }
     //
     public Long toSigned(String r1){
