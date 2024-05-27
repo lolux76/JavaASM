@@ -84,6 +84,15 @@ En utilisant la librairie Java swing, nous avons implémenté un éditeur de tex
 les registres utilisé lors de l'éxécutions d'un script. Cet éditeur utilise notre classe ASM et possède une coloration automatique
 des registres, des valeurs et des instrcutions disponible pour une création de script simplifiée.
 
+\subsection{Stack}
+
+La classe AsmStack est une classe singleton représentant la pile du coprocesseur arithmétique. Elle implémente les opérations push et pop et
+une taille maximale en bit peut être fixé pour représenter les limitations d'un vrai coprocesseur arithmétique. Par défaut, cette limite est de 64 kb.
+
+\subsection{Flags}
+
+La classe Flag est une classe registre particulière qui représente 5 drapeaux,le "Carry Flag", le "Parity Flag", le "Zero Flag", le "Sign Flag", et le "Overflow Flag".
+
 \section{Operations arithmetiques}
 \subsection{mov}
 mov permet l'enregistrement d'une valeur entière dans un registre.
@@ -140,9 +149,11 @@ S'il n'y a jamais égalité, on trouve le quotient au bout de maximum N - 1 ité
 Une autre propriété de ce calcul est que les deux suites sont toujours séparées de $2^{N - 1 - n}$ ce qui permet de montrer que les suites sont toujours définies dans l'intervalle et que dans le cas
 d'itérations maximales, $\alpha_{N - 1}$ est le plus grand minorant du quotient, c'est à dire, le quotient.
 \\
+\\
 Le nombre maximum d'étapes pour ce calcul est de $\log_2{\frac{dividende}{diviseur}}$ qui chacune ne nécessite que des additions, multiplication, décalages et comparaisons.
 \\
 En concaténant les 2 étapes l'algorithme est très efficace avec une complexité qui grandit en fonction de $\frac{dividende}{diviseur}$ et donc de manière linéaire avec le $dividende$. Cette méthode est donc très efficace.
+\\
 \\
 Enfin, le reste se calcul en effectuant une simple soustraction : $reste = dividende - quotient * diviseur$
 
