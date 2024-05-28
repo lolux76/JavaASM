@@ -22,13 +22,15 @@ Ces registres peuvent intéragir entre eux, exemples, les expression aarithméti
 
 \section{Organisation de notre programme}
 \subsection{ASM}
-Nous avons créé une classe ASM qui vas reprendre l'ensemble des registres x86 initialise. Ceci nous permet donc de directement les manipuler sans devoir les créer. Ce sera cette classe qui sera utilisé dans la partie interpretation graphique pour ne pas avoir à rajouter la gestion de la création.
-
+Nous avons créé une classe ASM qui vas reprendre l'ensemble des registres x86 initialise. Ceci nous permet donc de directement les manipuler sans devoir les créer. Ce sera cette classe qui sera utilisé dans la partie interprétation graphique pour ne pas avoir à rajouter la gestion de la création.
+Cette classe est donc composée de 16 BitSets de 128bits. À chacun de ces BitSets seront attribués un registre de chaque taille de la classe Register que nous verront plus bas. De ce fait, les registes de 16 bits (ax par exemple) définieront la partie basse des registres de 32 bits (dans le cas d'eax, sa partie basse sera ax).
+La classe ASM représentera donc l'ensemble des registres utilisables, afin d'être fonctionnel, et utilisable avec l'interface graphique qui utilise des chaines de caractères, elle implémente une fonction "parsing(String)" qui retournera le registre dont le nom est donné.
+Cette fonction sera utilisée dans la plupart des fonctions de la classe qui utiliseront un ou plusieurs registres à partir de leur noms. Par la suite, cette classe implémentera le lien entre les fonctions de l'interface graphique et celle de la classe Register que nous verront plus bas.
 
 \subsection{Register}
 La classe Register est la classe principale du programme. En effet c'est dans cette classe que l'on vas définir l'ensemble des variables pour la création et la gestion des Registre.
 
-Il possède un nom.
+Il possède un nom qui sert essentiellement à les identifier.
 Un bitset (une array de boolean sur lequel certaines fonctions sont déjà définies).
 Un entier de début et de fin.
 Une partie haute et une partie basse.
@@ -49,11 +51,11 @@ Pour implémenter le calcul de l'addition je me suis basé sur l'algorithme stan
 8| }
 \end{verbatim}
 
-1 - Initialisation de la variable chargée de stocké la retenue
+1 - Initialisation de la variable chargée de stocké la retenue.
 
-4 - Boucle qui vas itérer sur l'entiereté de l'ArrayOfBit du registres 1
+4 - Boucle qui vas itérer sur l'entiereté de l'ArrayOfBit du registres 1.
 
-5 - Récupération du bit avec comme index i (utile car modifié par la suite)
+5 - Récupération du bit avec comme index i (utile car modifié par la suite).
 
 6 - Cette ligne calcul la valeur du bit i à l'aide de 2 xor effectué sur la retnue, r1 et r2. Cette ligne représente l'addition bninaire de ces 2 bits.
 
@@ -70,8 +72,8 @@ eax = 35 ; ebx = 15
 
 Il exite aussi des fonctions sur les piles :
 \begin{itemize}
-    \item push : Rajoute le bitset lié à la valeur ou au registre passé en paramètre
-    \item pop : Récupère le dernier bitset enregistré dans la pile
+    \item push : Rajoute le bitset lié à la valeur ou au registre passé en paramètre.
+    \item pop : Récupère le dernier bitset enregistré dans la pile et l'y enlève.
 \end{itemize}
 Et pour finir les expression logiques sont aussi disponibles sur ces registres :
 \begin{itemize}
@@ -129,6 +131,26 @@ shr produit un décalge à droite d'un registre selon la valeur souhaitée.
 \\
 \\
 \includegraphics[width=0.5\textwidth]{img/shr.png}
+
+\subsection{mul}
+La multiplication s'effectue en faisant la somme de la valeur du multiplicande par les valeurs des bits du multiplicateur avec un décallage à gauche
+\begin{verbatim}
+1| for (int i = operande.debut; i < operande.fin; i++) {
+2|          if (operande.getArrayOfBit().get(i)) {
+3|              boolean retenue = false;
+4|              for(int j=0;j<result.size();j++){
+5|                  boolean a1 = result.get(j);
+6|                  result.set(j,result.get(j) ^ r2.arrayOfBit.get(j) ^ retenue); //addition de chaque bit 1 à 1
+7|                  retenue = (a1 & retenue) | (r2.arrayOfBit.get(j) & retenue) | (a1 & r2.arrayOfBit.get(j)); //Retenue si au moins 2 bit à 1
+8|              }
+9|          }
+10|         r2.shl(1);
+11|     }
+\end{verbatim}
+1 | Pour chaque valeur du multiplicande ("operande")
+2 | s'il est égal à 1
+3-7 | on l'additionne au résultat,
+10 | Enfin on décalle de 1 vers la gauche
 
 \subsection{div}
 La division s'effectue en suivant un algorithme binaire proche de la technique de la division Egyptienne.
