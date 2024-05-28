@@ -38,7 +38,7 @@ public class ASMEditorBack {
             return;
         }
         String[] parts = line.split(";");
-        String instructionPart = parts[0].trim(); // Partie d'instruction avant le commentaire
+        String instructionPart = parts[0].trim();
 
         if (instructionPart.isEmpty()) {
             return;
@@ -176,12 +176,12 @@ public class ASMEditorBack {
                     try {
                         if (arg.startsWith("word")) {
                             String valueStr = arg.substring(4).trim();
-                            long value = Long.parseLong(valueStr); // Assuming value is a number
-                            asm.push(value, 16); // 16-bit word
+                            long value = Long.parseLong(valueStr);
+                            asm.push(value, 16);
                         } else if (arg.startsWith("dword")) {
                             String valueStr = arg.substring(5).trim();
-                            long value = Long.parseLong(valueStr); // Assuming value is a number
-                            asm.push(value, 32); // 32-bit double word
+                            long value = Long.parseLong(valueStr);
+                            asm.push(value, 32);
                         } else {
                             asm.push(arg);
                             usedRegisters.add(arg);
@@ -195,6 +195,16 @@ public class ASMEditorBack {
                 System.err.println("Unknown instruction: " + instruction);
                 break;
         }
+        //on push et pop tous les registres présents
+        for (String register : usedRegisters) {
+            try {
+                asm.push(register);
+                asm.pop(register);
+            } catch (FullStackException | EmptyStackException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
     }
 
     private void saveResultsToJson() {
