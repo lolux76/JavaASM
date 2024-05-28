@@ -80,9 +80,27 @@ Et pour finir les expression logiques sont aussi disponibles sur ces registres :
     \item Not :
 \end{itemize}
 \subsection{ASMEditor}
-En utilisant la librairie Java swing, nous avons implémenté un éditeur de text qui nous permet d'afficher en même temps
-les registres utilisé lors de l'éxécutions d'un script. Cet éditeur utilise notre classe ASM et possède une coloration automatique
-des registres, des valeurs et des instrcutions disponible pour une création de script simplifiée.
+
+Nous avons décidé d'implémenter une interface graphique pour avoir une expérience plus agréable et dynamique sur la visualisation des résultats et sur
+l'écriture des instructions.
+Nous avons pour cela utilisé la librairie Java Swing, ce qui nous paraissait la plus adaptée pour ce type de visuel.
+\\
+\\
+\includegraphics[width=0.5\textwidth]{img/interface_graphique.png}
+
+L'interface graphique est divisée en deux parties : l'éditeur et les résultats.
+Il y a premièrement l'éditeur de texte,qui permet d'insérer les instructions.
+La coloration du texte concerne les registres, les mots-clés des instructions, ainsi que les nombres.
+Nous avons aussi fait en sorte qu'il soit possible de mettre des commentaires colorés en gris, qui sont caractérisés par un point-virgule en début de ligne.
+Ainsi, l'éditeur ne traitera pas ce qui suit le point-virgule.
+\\
+Ensuite, nous avons le tableau de registres, qui affiche pour chaque registres traités par les instructions son nom, sa valeur binaire, hexadécimale et décimale.
+Ce tableau est mis à jour à chaque fois que le bouton "Run" est lancé.
+Ce bouton traite les instructions de l'éditeur ligne par ligne.
+Quand on clique sur "Run", le contenu de l'éditeur est stocké dans un fichier JSON.
+Une méthode va interpréter ce fichier ligne par ligne pour reconnaitre les mots-clés à traiter.
+Ensuite, chaque registre qui est modifié ou appelé va etre stocké dans un autre JSON, et ce fichier sera lu pour afficher ces registres dans le tableau de l'interface graphique.
+Nous affichons aussi les Flags en bas du tableau.
 
 \subsection{Stack}
 
