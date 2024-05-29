@@ -12,21 +12,28 @@
 \section{Introduction}
 Le langage assembleur est le langage informatique le plus proche de la machine.
 
-Il utilise pour cela des bits qui représente des valeurs binaires. Ce langage permet d'effectuer la plupart des calculs arithmétique et logiques. Ces instructions sont représenté par des symboles bien plus lisible par l'humain.
+Il utilise pour cela des bits qui représentent des valeurs binaires.
+Ce langage permet d'effectuer la plupart des calculs arithmétiques et logiques.
+Ces instructions sont représentées par des symboles bien plus lisibles par l'humain.
 
 Exemple : \emph{mov eax,15}.
 
-Dans cette expression on peut voir, une instruction, un registre et une valeur. Un registre est un emplacement de mémoire qui dans notre cas vas stocké un ensemble de bits qui pour cette expression correspondras à la valeur binaire de 15 (00000 1111).
+Dans cette expression on peut voir, une instruction, un registre et une valeur.
+Un registre est un emplacement de mémoire qui dans notre cas vas stocker un ensemble de bits qui pour cette expression correspondra
+à la valeur binaire de 15 (00000 1111).
 
-Ces registres peuvent intéragir entre eux, exemples, les expression aarithmétique ou logiques entre deux registres.
+Ces registres peuvent intéragir entre eux, exemples, les expression arithmétiques ou logiques entre deux registres.
 
 \section{Organisation de notre programme}
 \subsection{ASM}
-Nous avons créé une classe ASM qui vas reprendre l'ensemble des registres x86 initialise. Ceci nous permet donc de directement les manipuler sans devoir les créer. Ce sera cette classe qui sera utilisé dans la partie interpretation graphique pour ne pas avoir à rajouter la gestion de la création.
+Nous avons créé une classe ASM qui vas reprendre l'ensemble des registres x86 initialisés.
+Ceci nous permet donc de directement les manipuler sans devoir les créer.
+Ce sera cette classe qui sera utilisée dans la partie interpretation graphique pour ne pas avoir à rajouter la gestion de la création.
 
 
 \subsection{Register}
-La classe Register est la classe principale du programme. En effet c'est dans cette classe que l'on vas définir l'ensemble des variables pour la création et la gestion des Registre.
+La classe Register est la classe principale du programme.
+En effet c'est dans cette classe que l'on vas définir l'ensemble des variables pour la création et la gestion des registres.
 
 Il possède un nom.
 Un bitset (une array de boolean sur lequel certaines fonctions sont déjà définies).
@@ -51,13 +58,15 @@ Pour implémenter le calcul de l'addition je me suis basé sur l'algorithme stan
 
 1 - Initialisation de la variable chargée de stocké la retenue
 
-4 - Boucle qui vas itérer sur l'entiereté de l'ArrayOfBit du registres 1
+4 - Boucle qui vas itérer sur l'entiereté de l'ArrayOfBit du registre 1
 
 5 - Récupération du bit avec comme index i (utile car modifié par la suite)
 
-6 - Cette ligne calcul la valeur du bit i à l'aide de 2 xor effectué sur la retnue, r1 et r2. Cette ligne représente l'addition bninaire de ces 2 bits.
+6 - Cette ligne calcul la valeur du bit i à l'aide de 2 xor effectué sur la retenue, r1 et r2.
+Cette ligne représente l'addition binaire de ces 2 bits.
 
-7 - Pour finir, cette ligne calcul la valeur de la retenue pour le prochain bit. La retenue est vrai si au moins 2 des 3 valeurs (la retenue actuelle et les 2 registres) sont vrais.
+7 - Pour finir, cette ligne calcul la valeur de la retenue pour le prochain bit.
+La retenue est vraie si au moins 2 des 3 valeurs (la retenue actuelle et les 2 registres) sont vrais.
 
 Le resultat sera stocké par la suite dans le premier registre passé en paramètre, exemple :
 \begin{verbatim}
@@ -68,7 +77,7 @@ add eax,ebx
 eax = 35 ; ebx = 15
 \end{verbatim}
 
-Il exite aussi des fonctions sur les piles :
+Il existe aussi des fonctions sur les piles :
 \begin{itemize}
     \item push : Rajoute le bitset lié à la valeur ou au registre passé en paramètre
     \item pop : Récupère le dernier bitset enregistré dans la pile
@@ -89,7 +98,7 @@ Nous avons pour cela utilisé la librairie Java Swing, ce qui nous paraissait la
 \includegraphics[width=0.5\textwidth]{img/interface_graphique.png}
 
 L'interface graphique est divisée en deux parties : l'éditeur et les résultats.
-Il y a premièrement l'éditeur de texte,qui permet d'insérer les instructions.
+Il y a premièrement l'éditeur de texte, qui permet d'insérer les instructions.
 La coloration du texte concerne les registres, les mots-clés des instructions, ainsi que les nombres.
 Nous avons aussi fait en sorte qu'il soit possible de mettre des commentaires colorés en gris, qui sont caractérisés par un point-virgule en début de ligne.
 Ainsi, l'éditeur ne traitera pas ce qui suit le point-virgule.
