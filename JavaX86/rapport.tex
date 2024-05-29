@@ -20,6 +20,17 @@ Dans cette expression on peut voir, une instruction, un registre et une valeur. 
 
 Ces registres peuvent intéragir entre eux, exemples, les expression aarithmétique ou logiques entre deux registres.
 
+\section{Organisation du projet}
+
+\subsection{Outils}
+Le langage utilisé est Java, pour le back-end et pour le front-end.
+La partie visuelle est développée avec Java Swing.
+Pour une meilleure gestion du projet, nous avons utilisé Git, ce qui nous permet de pouvoir développer chacun de notre côté nos fonctionnalités sans dépendre des autres.
+\\
+Nous avons utilisé IntelliJ Idea pour le développement, qui bénéficie de plusieurs plugins utiles pour une gestion plus agréable des différents aspects du projet.
+Par exemple le plugin GitToolbox qui permets de gerer le repo Git sans utiliser de lignes de commandes et qui nous permets d'avoir un visuel en temps réel sur les différentes branches.
+Le projet est un projet Maven.
+
 \section{Organisation de notre programme}
 \subsection{ASM}
 Nous avons créé une classe ASM qui vas reprendre l'ensemble des registres x86 initialise. Ceci nous permet donc de directement les manipuler sans devoir les créer. Ce sera cette classe qui sera utilisé dans la partie interprétation graphique pour ne pas avoir à rajouter la gestion de la création.
