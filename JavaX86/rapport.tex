@@ -31,56 +31,14 @@ Cette fonction sera utilisée dans la plupart des fonctions de la classe qui uti
 La classe Register est la classe principale du programme. En effet c'est dans cette classe que l'on vas définir l'ensemble des variables pour la création et la gestion des Registre.
 
 Il possède un nom qui sert essentiellement à les identifier.
-Un bitset (une array de boolean sur lequel certaines fonctions sont déjà définies).
+Un bitset.
 Un entier de début et de fin.
 Une partie haute et une partie basse.
 
+Le bitset des registres correspond à un tableau de Bits. De manière technqiue, il s'agit d'un Array de booléen sur lequel certains calculs sont déjà implémentés.
+
 Il y a plusieurs constructeurs possible avec initialisation de valeur ou non.
 
-\subsubsection{Addition}
-Pour implémenter le calcul de l'addition je me suis basé sur l'algorithme standard de calcul de l'addition binaire sur le BitSet de Registres.
-
-\begin{verbatim}
-1| boolean retenue=false;
-2| boolean signed = r1.getArrayOfBit().get(r1.fin - 1) && r2.getArrayOfBit().get(r2.fin - 1);
-3|
-4| for(int i=0;i<r1.arrayOfBit.size();i++){
-5|    boolean a1 = r1.arrayOfBit.get(i);
-6|    r1.arrayOfBit.set(i,r1.arrayOfBit.get(i) ^ r2.arrayOfBit.get(i) ^ retenue); //addition de chaque bit 1 à 1
-7|    retenue = (a1 & retenue) | (r2.arrayOfBit.get(i) & retenue) | (a1 & r2.arrayOfBit.get(i)); //Retenue si au moins 2 bit à 1
-8| }
-\end{verbatim}
-
-1 - Initialisation de la variable chargée de stocké la retenue.
-
-4 - Boucle qui vas itérer sur l'entiereté de l'ArrayOfBit du registres 1.
-
-5 - Récupération du bit avec comme index i (utile car modifié par la suite).
-
-6 - Cette ligne calcul la valeur du bit i à l'aide de 2 xor effectué sur la retnue, r1 et r2. Cette ligne représente l'addition bninaire de ces 2 bits.
-
-7 - Pour finir, cette ligne calcul la valeur de la retenue pour le prochain bit. La retenue est vrai si au moins 2 des 3 valeurs (la retenue actuelle et les 2 registres) sont vrais.
-
-Le resultat sera stocké par la suite dans le premier registre passé en paramètre, exemple :
-\begin{verbatim}
-mov eax,20
-mov ebx,15
-add eax,ebx
-
-eax = 35 ; ebx = 15
-\end{verbatim}
-
-Il exite aussi des fonctions sur les piles :
-\begin{itemize}
-    \item push : Rajoute le bitset lié à la valeur ou au registre passé en paramètre.
-    \item pop : Récupère le dernier bitset enregistré dans la pile et l'y enlève.
-\end{itemize}
-Et pour finir les expression logiques sont aussi disponibles sur ces registres :
-\begin{itemize}
-    \item And :
-    \item Or :
-    \item Not :
-\end{itemize}
 \subsection{ASMEditor}
 
 Nous avons décidé d'implémenter une interface graphique pour avoir une expérience plus agréable et dynamique sur la visualisation des résultats et sur
@@ -119,6 +77,39 @@ mov permet l'enregistrement d'une valeur entière dans un registre.
 \\
 \\
 \includegraphics[width=0.5\textwidth]{img/mov.png}
+
+\subsubsection{Addition}
+Pour implémenter le calcul de l'addition je me suis basé sur l'algorithme standard de calcul de l'addition binaire sur le BitSet de Registres.
+
+\begin{verbatim}
+1| boolean retenue=false;
+2| boolean signed = r1.getArrayOfBit().get(r1.fin - 1) && r2.getArrayOfBit().get(r2.fin - 1);
+3|
+4| for(int i=0;i<r1.arrayOfBit.size();i++){
+5|    boolean a1 = r1.arrayOfBit.get(i);
+6|    r1.arrayOfBit.set(i,r1.arrayOfBit.get(i) ^ r2.arrayOfBit.get(i) ^ retenue); //addition de chaque bit 1 à 1
+7|    retenue = (a1 & retenue) | (r2.arrayOfBit.get(i) & retenue) | (a1 & r2.arrayOfBit.get(i)); //Retenue si au moins 2 bit à 1
+8| }
+\end{verbatim}
+
+1 - Initialisation de la variable chargée de stocké la retenue.
+
+4 - Boucle qui vas itérer sur l'entiereté de l'ArrayOfBit du registres 1.
+
+5 - Récupération du bit avec comme index i (utile car modifié par la suite).
+
+6 - Cette ligne calcul la valeur du bit i à l'aide de 2 xor (ou exclusif) effectué sur la retenue, r1 et r2. Cette ligne représente l'addition bninaire de ces 2 bits.
+
+7 - Pour finir, cette ligne calcul la valeur de la retenue pour le prochain bit. La retenue est vrai si au moins 2 des 3 valeurs (la retenue actuelle et les 2 registres) sont vrais.
+
+Le resultat sera stocké par la suite dans le premier registre passé en paramètre, exemple :
+\begin{verbatim}
+mov eax,20
+mov ebx,15
+add eax,ebx
+
+eax = 35 ; ebx = 15
+\end{verbatim}
 
 \subsection{shl}
 shl produit un décalage à gauche d'un registre selon la valeur souhaitée.
