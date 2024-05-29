@@ -63,15 +63,40 @@ L'interface graphique est divisée en deux parties : l'éditeur et les résultat
 Il y a premièrement l'éditeur de texte,qui permet d'insérer les instructions.
 La coloration du texte concerne les registres, les mots-clés des instructions, ainsi que les nombres.
 Nous avons aussi fait en sorte qu'il soit possible de mettre des commentaires colorés en gris, qui sont caractérisés par un point-virgule en début de ligne.
-Ainsi, l'éditeur ne traitera pas ce qui suit le point-virgule.
+
+\\
 \\
 Ensuite, nous avons le tableau de registres, qui affiche pour chaque registres traités par les instructions son nom, sa valeur binaire, hexadécimale et décimale.
 Ce tableau est mis à jour à chaque fois que le bouton "Run" est lancé.
-Ce bouton traite les instructions de l'éditeur ligne par ligne.
-Quand on clique sur "Run", le contenu de l'éditeur est stocké dans un fichier JSON.
+Ce bouton va permettre à l'application d'exécuter les instructions données dans l'éditeur.
+Quand on clique sur "Run", le contenu de l'éditeur est stocké dans un fichier JSON "editeur.json".
 Une méthode va interpréter ce fichier ligne par ligne pour reconnaitre les mots-clés à traiter.
-Ensuite, chaque registre qui est modifié ou appelé va etre stocké dans un autre JSON, et ce fichier sera lu pour afficher ces registres dans le tableau de l'interface graphique.
+Ensuite, chaque registre qui est modifié ou appelé va etre stocké dans un autre JSON "resultats.json", et ce fichier sera lu pour afficher ces registres dans le tableau de l'interface graphique.
 Nous affichons aussi les Flags en bas du tableau.
+
+\subsection{ASMEditorBack}
+
+La classe ASMEditor permet de faire la passerelle entre l'interface graphique et la partie back-end de l'application.
+Elle est composé de trois méthodes.
+
+\subsubsection{interpretEditorContent}
+Cette méthode va interpréter le contenu de l'éditeur de texte récupéré dans "editeur.json" ligne par ligne.
+Pour chaque ligne, la méthode interpretLine est appelée avec le contenu de la ligne en paramètre.
+Une fois la totalité du contenu de l'éditeur traité, on apelle la méthode saveResultsToJson.
+
+\subsubsection{interpretLine}
+Cette méthode va traiter la ligne donnée en paramètre, en vérifiant premièrement si cette ligne contient un commentaire, caractérisé par un point-virgule.
+Ainsi, l'éditeur ne traitera pas ce qui suit le point-virgule.
+La méthode va ensuite analyser chaque mot-clé, chaque partie de la ligne pour pouvoir appeler les différentes méthodes de traitement des instructions.
+On vérifie aussi si chaque instruction possède son bon nombre de paramètre sous le bon format.
+Si ce n'est pas le cas, on affiche une erreur dans le terminal pour l'instruction concernée.
+Une liste de registre "usedRegisters" est mise à jour à chaque fois qu'un registre est reconnu ou est utilisé dans une instruction pour pouvoir l'afficher dans le tableau sur l'interface graphique.
+
+\subsubsection{saveResultsToJson}
+
+La méthode saveResultsToJson va simplement récupérer tous les registres de la liste "usedRegisters" et insérer dans le fichier "resultats.json"
+leur valeur binaire, hexadécimale et décimale en appelant les méthodes de conversions de la classe Register.
+
 
 \subsection{Stack}
 
