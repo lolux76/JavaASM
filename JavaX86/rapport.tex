@@ -125,7 +125,15 @@ mov permet l'enregistrement d'une valeur entière dans un registre.
 \\
 \includegraphics[width=0.5\textwidth]{img/mov.png}
 
-\newpage
+\subsubsection{Complément à deux}
+
+\begin{verbatim}
+1| Register.not(r1);
+2| Register.add(r1,new Register("add",new BitSet(r1.arrayOfBit.size()),0,r1.arrayOfBit.size(),1));
+\end{verbatim}
+
+Pour passer un registre à son complément à deux, ce qui correspond à sa valeur négative pour une méthode non naïve. Il suffit d'inverser les Bits(ligne 1), puis de rajouter 1 à ce résultat (Ligne 2).
+
 \subsubsection{Addition}
 Pour implémenter le calcul de l'addition je me suis basé sur l'algorithme standard de calcul de l'addition binaire sur le BitSet de Registres.
 
@@ -163,6 +171,41 @@ add eax,ebx
 
 eax = 35 ; ebx = 15
 \end{verbatim}
+
+\subsubsection{Soustraction}
+Au commencement, pour avoir une fonction de soustraction fonctionnel le plus tôt possible, j'ai effectué une addition entre le premier paramètre et le complémnt à deux du second paramètre.\\
+Ce qui en théorie fonctionne, mais qui est préférable d'éviter.
+Alors, tout comme le calcul de l'addition je me suis basé sur un algorithme standard de calcul binaire sur le BitSet des registres.
+
+\begin{verbatim}
+1| BitSet retenue = new BitSet(r1.getSize());
+2| boolean signed = r1.getArrayOfBit().get(r1.fin - 1) && r2.getArrayOfBit().get(r2.fin - 1);
+3| for (int i = 0; i < r1.getSize(); i++) {
+4|    boolean r1Bis = r1.arrayOfBit.get(i);
+5|    boolean r2Bis = r2.arrayOfBit.get(i);
+6|    boolean retenusBis = retenue.get(i);
+
+7|    boolean resultBit = (r1Bis ^ r2Bis) ^ retenusBis;
+8|    r1.arrayOfBit.set(i, resultBit);
+
+9|    boolean newRetenue = (!r1Bis && (r2Bis || retenusBis)) || (r2Bis && retenusBis);
+10|    if (newRetenue) {
+11|        retenue.set(i + 1);
+12|    }
+13| }
+\end{verbatim}
+
+1 - Création d'un BitSet de retenue de la même taille que le premier registre.
+
+3 - Boucle qui va itérer sur l'entiereté de l'ArrayOfBit du registre 1.
+
+4/5/6 - Récupération des Bits, des deux registres et de la retenue à l'index actuel.
+
+7/8 - Calcul et insertion du Bit à l'index actuel.
+
+9-12 - Calcul de la nouvelle retenue pour le prochain index.
+
+Comme pour l'addition, le resultat est stocké dans le premier registre (Ligne 8).
 
 \newpage
 \subsection{shl}
