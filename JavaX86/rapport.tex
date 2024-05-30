@@ -120,7 +120,8 @@ Pour implémenter le calcul de l'addition je me suis basé sur l'algorithme stan
 
 \begin{verbatim}
 1| boolean retenue=false;
-2| boolean signed = r1.getArrayOfBit().get(r1.fin - 1) && r2.getArrayOfBit().get(r2.fin - 1);
+2| boolean signed = r1.getArrayOfBit().get(r1.fin - 1) &&
+   r2.getArrayOfBit().get(r2.fin - 1);
 3|
 4| for(int i=0;i<r1.arrayOfBit.size();i++){
 5|   boolean a1 = r1.arrayOfBit.get(i);
