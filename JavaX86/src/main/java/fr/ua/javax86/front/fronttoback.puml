@@ -1,0 +1,80 @@
+@startuml
+
+package "fr.ua.javax86.front" {
+
+    class ASMEditor {
+        - JTextPane textPane
+        - DefaultTableModel tableModel
+        - JTextField textFlags
+        - Map<String, Color> colorMap
+        --
+        + ASMEditor()
+        + void main(String[] args)
+        - void lireColoration()
+        - Color getColorByName(String name)
+        - AttributeSet createGrayAttributeSet()
+        - void appliquerColoration()
+        - void updateTableWithRegisters()
+    }
+
+    class ASMEditorBack {
+        - ASM asm
+        - Set<String> usedRegisters
+        --
+        + void interpretEditorContent()
+        - void interpretLine(String line)
+        - void saveResultsToJson()
+    }
+
+    ASMEditor -- ASMEditorBack : uses
+
+    ASMEditorBack : ASM asm
+    ASMEditorBack : Set<String> usedRegisters
+}
+
+package "fr.ua.javax86.asm" {
+    class ASM {
+        + void mov(String reg, int value)
+        + void shl(String reg, int value)
+        + void add(String reg1, String reg2)
+        + void sub(String reg1, String reg2)
+        + void mul(String reg)
+        + void div(String reg)
+        + void and(String reg1, String reg2)
+        + void or(String reg1, String reg2)
+        + void xor(String reg1, String reg2)
+        + void not(String reg)
+        + void pop(String reg) throws EmptyStackException
+        + void push(String reg) throws FullStackException
+        + void push(long value, int size) throws FullStackException
+        + Register parsing(String reg)
+    }
+}
+
+package "fr.ua.javax86.exceptions" {
+    class EmptyStackException extends Exception {
+    }
+
+    class FullStackException extends Exception {
+    }
+}
+
+package "fr.ua.javax86.model" {
+    class Flags {
+        + static String getFlags()
+    }
+
+    class Register {
+        + String toString()
+        + String toHex()
+        + String toSigned()
+    }
+}
+
+ASMEditorBack -- ASM : uses
+ASMEditorBack -- Register : uses
+ASMEditorBack -- Flags : uses
+ASMEditorBack -- EmptyStackException : uses
+ASMEditorBack -- FullStackException : uses
+
+@enduml

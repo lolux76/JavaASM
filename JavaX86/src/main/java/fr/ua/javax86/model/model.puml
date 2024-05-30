@@ -1,0 +1,78 @@
+@startuml
+
+package fr.ua.javax86.model {
+
+    class Register {
+        - String name
+        - BitSet arrayOfBit
+        + BitSet initialBitSet
+        - int debut
+        - int fin
+        - Register partieHaute
+        - Register partieBasse
+
+        + Register(String name, BitSet arrayOfBit, int debut, int fin)
+        + Register(String name, BitSet arrayOfBit, int debut, int fin, boolean pourConstructeur)
+        + Register(String name, BitSet arrayOfBit, int debut, int fin, int value)
+
+        + void updateInitialBitSet()
+        + Register getPartieBasse()
+        + Register getPartieHaute()
+
+        + static void add(Register r1, Register r2)
+        + static void sub(Register r1, Register r2)
+        + static void mul(Register r1, Register r2, Register operande)
+        + static void div(Register quotient, Register dividend, Register divisor, Register remainder)
+
+        + static void and(Register r1, Register r2)
+        + static void or(Register r1, Register r2)
+        + static void xor(Register r1, Register r2)
+        + static void not(Register r1)
+
+        + BitSet getArrayOfBit()
+        + void setArrayOfBit(BitSet bitSet)
+
+        + void mov(int value)
+
+        + void shl(int distance)
+        + static void shl(BitSet bitset, int distance)
+
+        + void shr(int distance)
+
+        + static int cmp(Register r1, Register r2)
+
+        + long toSigned()
+        + long toUnsigned()
+        + String toHex()
+        + String toOct()
+        + String toString()
+
+        # boolean isHomogeneous()
+        + static int findMostSignificantBit(BitSet bs)
+    }
+
+    class BitSet {
+        // BitSet attributes and methods
+    }
+
+    class Flags {
+        + static Flags getFlags()
+        + void setCarryFlag(boolean value)
+        + void setZeroFlag(boolean value)
+        + void setOverflowFlag(boolean value)
+        + void setSignFlag(boolean value)
+        + void setParityFlag(boolean value)
+        + boolean getCarryFlag()
+        + boolean getZeroFlag()
+        + boolean getOverflowFlag()
+        + boolean getSignFlag()
+        + boolean getParityFlag()
+    }
+
+    Register "1" -- "*" Register : partieHaute
+    Register "1" -- "*" Register : partieBasse
+    Register --> BitSet : uses
+    Register --> Flags : uses
+}
+
+@enduml
