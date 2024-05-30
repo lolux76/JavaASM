@@ -393,7 +393,7 @@ public class Register {
     }
 
     public BitSet getArrayOfBit() {
-        return this.initialBitSet;
+        return this.arrayOfBit;
     }
 
     public void setArrayOfBit(BitSet bitSet) {
