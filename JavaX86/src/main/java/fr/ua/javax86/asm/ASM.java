@@ -429,6 +429,11 @@ public class ASM {
         Registre1.shl(value);
     }
 
+    public void shr(String r1, int value){
+        Register Registre1 = this.parsing(r1);
+        Registre1.shr(value);
+    }
+
     //Opérations mathématiques
     public void add(String r1, String r2){
         Register Registre1 = this.parsing(r1);
