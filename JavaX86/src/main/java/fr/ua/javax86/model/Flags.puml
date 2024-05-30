@@ -1,0 +1,21 @@
+@startuml
+package "fr.ua.javax86.model" {
+    class Flags {
+        - BitSet bitSet
+        - static Flags instance
+        --
+        + static Flags getFlags()
+        + void setZeroFlag(boolean value)
+        + void setCarryFlag(boolean value)
+        + void setParityFlag(boolean value)
+        + void setOverflowFlag(boolean value)
+        + void setSignFlag(boolean value)
+        + boolean getZeroFlag()
+        + boolean getCarryFlag()
+        + boolean getParityFlag()
+        + boolean getOverflowFlag()
+        + boolean getSignFlag()
+        + String toString()
+    }
+}
+@enduml
