@@ -71,6 +71,15 @@ public class ASMEditorBack {
                     System.err.println("Invalid shl instruction: " + line);
                 }
                 break;
+            case "shr":
+                if (args.length == 2) {
+                    String reg = args[0].trim();
+                    asm.shr(reg, Integer.parseInt(args[1].trim()));
+                    usedRegisters.add(reg);
+                } else {
+                    System.err.println("Invalid shr instruction: " + line);
+                }
+                break;
             case "add":
                 if (args.length == 2) {
                     String reg1 = args[0].trim();
@@ -191,6 +200,7 @@ public class ASMEditorBack {
                     }
                 }
                 break;
+
             default:
                 System.err.println("Unknown instruction: " + instruction);
                 break;
