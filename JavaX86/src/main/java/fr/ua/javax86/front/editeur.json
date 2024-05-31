@@ -1,0 +1,1 @@
+{"content":"mov ebx,2\nmov eax  ,2\nsub eax,ebx"}

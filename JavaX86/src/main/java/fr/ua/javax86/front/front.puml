@@ -1,0 +1,36 @@
+@startuml
+
+package "fr.ua.javax86.front" {
+
+    class ASMEditor {
+        - JTextPane textPane
+        - DefaultTableModel tableModel
+        - JTextField textFlags
+        - Map<String, Color> colorMap
+        --
+        + ASMEditor()
+        + void main(String[] args)
+        - void lireColoration()
+        - Color getColorByName(String name)
+        - AttributeSet createGrayAttributeSet()
+        - void appliquerColoration()
+        - void updateTableWithRegisters()
+    }
+
+    class ASMEditorBack {
+        - ASM asm
+        - Set<String> usedRegisters
+        --
+        + void interpretEditorContent()
+        - void interpretLine(String line)
+        - void saveResultsToJson()
+    }
+
+    ASMEditor -- ASMEditorBack : uses
+
+    ASMEditorBack : ASM asm
+    ASMEditorBack : Set<String> usedRegisters
+
+}
+
+@enduml

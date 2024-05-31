@@ -1,0 +1,19 @@
+@startuml
+package "fr.ua.javax86.model" {
+    class AsmStack {
+        - Stack<BitSet> stack
+        - long size
+        - long actualSize
+        --
+        + AsmStack()
+        + AsmStack(long stackSize)
+        + void push(BitSet bitSet) throws FullStackException
+        + void push(long valeur, int taille) throws FullStackException
+        + BitSet pop() throws EmptyStackException
+        + boolean isEmpty()
+    }
+
+    AsmStack -- EmptyStackException : throws
+    AsmStack -- FullStackException : throws
+}
+@enduml
